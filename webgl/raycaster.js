@@ -1,7 +1,6 @@
 import Events from 'events'
 
 import mouse from '@/plugins/mouse'
-import raf from '@/plugins/raf'
 
 class Raycaster {
   constructor() {
@@ -11,7 +10,7 @@ class Raycaster {
 
     this.events = new Events()
 
-    raf.add('raycaster', this.loop.bind(this), { index: 0 })
+    mouse.events.on('mousemove', this.raycast.bind(this))
   }
 
   addTarget(object) {
@@ -24,7 +23,7 @@ class Raycaster {
     delete this.targets[object.uuid]
   }
 
-  loop() {
+  raycast() {
     if (!this.camera) return
 
     this.raycaster.setFromCamera(mouse.normalized, this.camera)

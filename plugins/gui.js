@@ -5,6 +5,6 @@ init(dat)
 
 const gui = new dat.GUI()
 
-gui.camera = gui.addFolder('Caméra')
+gui.camera = gui.addFolder('Camera')
 
 export default gui

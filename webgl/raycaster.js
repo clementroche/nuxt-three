@@ -1,5 +1,4 @@
 import Events from 'events'
-import store from '@/store'
 
 import mouse from '@/plugins/mouse'
 import raf from '@/plugins/raf'
@@ -9,10 +8,6 @@ class Raycaster {
     this.raycaster = new THREE.Raycaster()
 
     this.targets = {}
-
-    setTimeout(() => {
-      console.log(store)
-    }, 1000)
 
     this.events = new Events()
 

@@ -1,0 +1,54 @@
+/*
+Sass module goal:
+
+@use "modules:responsive-values" as rv with (
+  $breakpoints: (...),
+  $values: (...)
+);
+
+:root {
+  @include rv.properties();
+}
+
+.my-selector {
+  font-size: rv.get('font-size', 'xxl');
+}
+*/
+
+$responsive-values: () !default;
+
+$breakpoints: (
+  'm': 768px,
+  'l': 1024px,
+  'xl': 1280px
+) !default;
+
+@mixin responsive-properties() {
+  $_breakpoints: map-keys($breakpoints);
+  @each $_property-name, $_property-map in $responsive-values {
+    @each $_value-name, $_value in $_property-map {
+      --#{$_property-name}-#{$_value-name}: #{nth($_value, 1)};
+    }
+    @each $_breakpoint in $_breakpoints {
+      $_breakpoint-index: index($_breakpoints, $_breakpoint);
+      @include media('>=#{$_breakpoint}') {
+        @each $_value-name, $_value in $_property-map {
+          @if ($_breakpoint-index < length($_value)) {
+            --#{$_property-name}-#{$_value-name}: #{nth($_value,
+            $_breakpoint-index + 1)};
+          }
+        }
+      }
+    }
+  }
+}
+
+@function get-value($name, $value, $breakpoint-index) {
+  $_property: map-get($responsive-values, $name);
+  $_value: map-get($_property, $value);
+  $_index: 1 !default;
+  @if variable-exists($breakpoint-index) {
+    $_index: $breakpoint-index;
+  }
+  @return map-get($_value, $_index);
+}

@@ -1,0 +1,95 @@
+$colors: (
+  'transparent': rgba(255, 255, 255, 0.001),
+  'white': rgba(255, 255, 255, 1)
+);
+
+$breakpoints: (
+  'm': 768px,
+  'l': 1024px,
+  'xl': 1280px
+);
+
+$responsive-values: (
+  'font-size': (
+    's': (
+      14px,
+      16px
+    ),
+    'm': (
+      16px,
+      24px
+    ),
+    'l': (
+      24px,
+      32px
+    ),
+    'xl': (
+      32px,
+      48px
+    ),
+    'xxl': (
+      48px,
+      64px
+    )
+  ),
+  'spacing': (
+    'xs': (
+      10px,
+      20px
+    ),
+    's': (
+      20px,
+      40px
+    ),
+    'm': (
+      40px,
+      80px
+    ),
+    'l': (
+      80px,
+      160px
+    )
+  ),
+  'letter-spacing': (
+    'xl': (
+      0.2em,
+      0.2em
+    ),
+    'l': (
+      0.1em,
+      0.1em
+    ),
+    'm': (
+      0.05em,
+      0.05em
+    ),
+    's': (
+      0.01em,
+      0.01em
+    )
+  ),
+  'line-height': (
+    's': (
+      14px,
+      16px
+    ),
+    'm': (
+      16px,
+      24px
+    ),
+    'l': (
+      24px,
+      32px
+    ),
+    'xl': (
+      32px,
+      48px
+    ),
+    'xxl': (
+      48px,
+      64px
+    )
+  )
+);
+
+$font-faces: ('Tobias-Light', 'Tobias-Bold', 'Tobias-Heavy');

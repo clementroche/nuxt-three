@@ -1,0 +1,99 @@
+$_easings: (
+  'sine': (
+    'in': (0.47, 0, 0.745, 0.715),
+    'out': (0.39, 0.575, 0.565, 1),
+    'in-out': (0.39, 0.575, 0.565, 1)
+  ),
+  'quad': (
+    'in': (0.55, 0.085, 0.68, 0.53),
+    'out': (0.25, 0.46, 0.45, 0.94),
+    'in-out': (0.25, 0.46, 0.45, 0.94)
+  ),
+  'cubic': (
+    'in': (0.55, 0.055, 0.675, 0.19),
+    'out': (0.215, 0.61, 0.355, 1),
+    'in-out': (0.215, 0.61, 0.355, 1)
+  ),
+  'quart': (
+    'in': (0.895, 0.03, 0.685, 0.22),
+    'out': (0.165, 0.84, 0.44, 1),
+    'in-out': (0.165, 0.84, 0.44, 1)
+  ),
+  'quint': (
+    'in': (0.755, 0.05, 0.855, 0.06),
+    'out': (0.23, 1, 0.32, 1),
+    'in-out': (0.23, 1, 0.32, 1)
+  ),
+  'expo': (
+    'in': (0.95, 0.05, 0.795, 0.035),
+    'out': (0.19, 1, 0.22, 1),
+    'in-out': (0.19, 1, 0.22, 1)
+  ),
+  'circ': (
+    'in': (0.6, 0.04, 0.98, 0.335),
+    'out': (0.075, 0.82, 0.165, 1),
+    'in-out': (0.075, 0.82, 0.165, 1)
+  ),
+  'back': (
+    'in': (0.6, -0.28, 0.735, 0.045),
+    'out': (0.175, 0.885, 0.32, 1.275),
+    'in-out': (0.68, -0.55, 0.265, 1.55)
+  ),
+  'fast': (
+    'in': (1, 0, 0, 0),
+    'out': (0, 0, 0, 1),
+    'in-out': (1, 0, 0, 1)
+  ),
+  'motion': (
+    'in-out': (0.4, 0, 0.2, 1)
+  )
+);
+
+@function _ease($name, $fill) {
+  $_easing: map-get($_easings, $name);
+  $_fill: 'in-out' !default;
+  @if variable-exists($fill) {
+    $_fill: $fill;
+  }
+  @return cubic-bezier(#{map-get($_easing, $_fill)});
+}
+
+@function sine($fill) {
+  @return _ease('sine', $fill);
+}
+
+@function quad($fill) {
+  @return _ease('quad', $fill);
+}
+
+@function cubic($fill) {
+  @return _ease('cubic', $fill);
+}
+
+@function quart($fill) {
+  @return _ease('quart', $fill);
+}
+
+@function quint($fill) {
+  @return _ease('quint', $fill);
+}
+
+@function expo($fill) {
+  @return _ease('expo', $fill);
+}
+
+@function circ($fill) {
+  @return _ease('circ', $fill);
+}
+
+@function back($fill) {
+  @return _ease('back', $fill);
+}
+
+@function fast($fill) {
+  @return _ease('fast', $fill);
+}
+
+@function motion($fill) {
+  @return _ease('motion', $fill);
+}

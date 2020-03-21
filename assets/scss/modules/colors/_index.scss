@@ -1,0 +1,11 @@
+$colors: () !default;
+
+@function color($name) {
+  @return map-get($colors, $name);
+}
+
+@mixin colors-properties() {
+  @each $color_name, $color_value in $colors {
+    --color-#{$color_name}: #{$color_value};
+  }
+}

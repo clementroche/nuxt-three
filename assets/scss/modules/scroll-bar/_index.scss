@@ -1,0 +1,12 @@
+// Chrome only scroll bar style
+@mixin scroll-bar($size, $colors) {
+  ::-webkit-scrollbar {
+    width: $size;
+  }
+
+  @each $part-name, $color-value in $colors {
+    ::-webkit-scrollbar-#{$part-name} {
+      background: $color-value;
+    }
+  }
+}

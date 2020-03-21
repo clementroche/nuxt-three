@@ -1,0 +1,60 @@
+{
+  "name": "nuxt-three",
+  "version": "0.0.1",
+  "description": "template using nuxt.js and three.js",
+  "author": "clementroche",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
+  },
+  "lint-staged": {
+    "*.{js,vue}": "eslint"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "dependencies": {
+    "@nuxtjs/device": "^1.2.7",
+    "@nuxtjs/dotenv": "^1.4.0",
+    "@nuxtjs/pwa": "^3.0.0-beta.20",
+    "@nuxtjs/style-resources": "^1.0.0",
+    "dat.gui": "^0.7.6",
+    "events": "^3.1.0",
+    "gsap": "^3.2.5",
+    "include-media": "^1.4.9",
+    "intersection-observer-polyfill": "^0.1.0",
+    "nuxt": "^2.12.0",
+    "nuxt-compress": "^1.1.0",
+    "postprocessing": "^6.13.0",
+    "stats.js": "^0.17.0",
+    "three": "^0.114.0",
+    "three-dat.gui": "^2.0.6",
+    "virtual-scroll": "^1.5.2"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.9.0",
+    "@nuxtjs/eslint-config": "^1.0.1",
+    "@nuxtjs/eslint-module": "^1.0.0",
+    "@nuxtjs/stylelint-module": "^3.2.2",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.1.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-nuxt": "^0.5.2",
+    "eslint-plugin-prettier": "^3.0.1",
+    "fibers": "^4.0.2",
+    "husky": "^2.6.0",
+    "lint-staged": "^8.2.1",
+    "node-sass": "^4.13.1",
+    "prettier": "^1.16.4",
+    "sass": "^1.26.3",
+    "sass-loader": "^8.0.2",
+    "stylelint": "^10.1.0",
+    "stylelint-config-sass-guidelines": "^6.2.0"
+  }
+}

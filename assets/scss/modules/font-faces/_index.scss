@@ -1,0 +1,17 @@
+// Exported with fontplop https://github.com/matthewgonzalez/fontplop
+$font-faces: () !default;
+
+@mixin font-faces() {
+  @each $font-face in $font-faces {
+    @font-face {
+      // Show fallback immediately, but swap as soon as the web font is ready (FOUT).
+      font-display: swap;
+      font-family: #{$font-face};
+      font-style: normal;
+      font-weight: 400;
+      src: url('/fonts/#{$font-face}/#{$font-face}.woff2') format('woff2'),
+        url('/fonts/#{$font-face}/#{$font-face}.woff') format('woff'),
+        url('/fonts/#{$font-face}/#{$font-face}.otf') format('opentype');
+    }
+  }
+}

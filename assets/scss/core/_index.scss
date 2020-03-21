@@ -1,0 +1,64 @@
+@include font-faces();
+
+:root {
+  --font-tobias-light: '#{nth($font-faces, 1)}', serif;
+  --font-tobias-bold: '#{nth($font-faces, 2)}', serif;
+  --font-tobias-heavy: '#{nth($font-faces, 3)}', serif;
+  @include colors-properties();
+  @include responsive-properties();
+}
+
+html {
+  box-sizing: border-box;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  word-spacing: 1px;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  // user-drag: none;
+  user-select: none;
+}
+
+input,
+textarea,
+button,
+select,
+a {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+a,
+a:hover,
+a:active,
+a:focus {
+  outline: 0 !important;
+}
+
+input::-moz-focus-inner {
+  border: 0;
+}
+
+button {
+  background: rgba(0, 0, 0, 0);
+  border: unset;
+  font-size: inherit;
+  padding: 0;
+
+  &:active {
+    border-style: unset;
+  }
+}

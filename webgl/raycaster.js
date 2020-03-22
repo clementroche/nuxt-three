@@ -2,6 +2,9 @@ import Events from 'events'
 
 import mouse from '@/plugins/mouse'
 
+import getStore from '@/store'
+const store = getStore()
+
 class Raycaster {
   constructor() {
     this.raycaster = new THREE.Raycaster()
@@ -24,7 +27,10 @@ class Raycaster {
   }
 
   raycast() {
-    if (!this.camera) return
+    const camera = store.getters['webgl/rendererCamera']
+    if (!camera) return
+
+    this.raycaster.setFromCamera(mouse.normalized, camera)
 
     this.raycaster.setFromCamera(mouse.normalized, this.camera)
 

@@ -7,6 +7,9 @@ import Renderer from '@/webgl/renderer/renderer'
 import raycaster from '@/webgl/raycaster'
 import rendererStats from '@/webgl/renderer-stats'
 
+import getStore from '@/store'
+const store = getStore()
+
 export class WebGL {
   constructor(canvas) {
     // canvas
@@ -33,15 +36,13 @@ export class WebGL {
       document.getElementById('__nuxt')
     )
 
-    // raycaster
-    raycaster.camera = this.camera
-
     // renderer
     this.renderer = new Renderer({
       canvas: this.canvas,
       camera: this.camera,
       scene: this.scene
     })
+    store.commit('webgl/setRenderer', this.renderer)
 
     this.addCube()
   }

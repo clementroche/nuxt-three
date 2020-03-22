@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <canvas id="appScene" ref="appScene" />
-  </div>
+  <canvas id="appScene" ref="appScene" />
 </template>
 
 <script>
@@ -20,12 +18,12 @@ export default {
 
 <style lang="scss">
 #appScene {
-  height: 100%;
+  height: 100% !important;
   left: 0;
   // pointer-events: none;
   position: fixed;
   top: 0;
-  width: 100%;
+  width: 100% !important;
   z-index: -1;
 }
 </style>

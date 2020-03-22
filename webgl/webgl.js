@@ -21,14 +21,17 @@ export class WebGL {
       viewport.width / 2,
       viewport.height / 2,
       viewport.height / -2,
-      -1000,
-      1000
+      -10000,
+      10000
     )
     this.camera.position.set(500, 500, 500)
     this.camera.lookAt(this.scene.position)
 
     // controls
-    this.cameraControls = new OrbitControls(this.camera, document.body)
+    this.cameraControls = new OrbitControls(
+      this.camera,
+      document.getElementById('__nuxt')
+    )
 
     // raycaster
     raycaster.camera = this.camera

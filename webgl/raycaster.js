@@ -32,8 +32,6 @@ class Raycaster {
 
     this.raycaster.setFromCamera(mouse.normalized, camera)
 
-    this.raycaster.setFromCamera(mouse.normalized, this.camera)
-
     const intersects = this.raycaster.intersectObjects(
       Object.values(this.targets),
       true

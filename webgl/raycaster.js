@@ -26,14 +26,7 @@ export default class Raycaster {
   }
 
   raycast() {
-<<<<<<< HEAD
     this.raycaster.setFromCamera(mouse.normalized, this.camera)
-=======
-    const camera = store.getters['webgl/rendererCamera']
-    if (!camera) return
-
-    this.raycaster.setFromCamera(mouse.normalized, camera)
->>>>>>> df4fc0db348c7e1f1376a8036eb8afeaa39609fd
 
     const intersects = this.raycaster.intersectObjects(
       Object.values(this.targets),

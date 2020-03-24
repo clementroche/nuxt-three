@@ -1,21 +1,9 @@
-import Vuex from 'vuex'
+export const strict = false
 
-import webglStore from './webgl'
+export const state = () => ({})
 
-let store
+export const mutations = {}
 
-const initStore = () => {
-  return (
-    store ||
-    (store = new Vuex.Store({
-      state: {},
-      getters: {},
-      mutations: {},
-      actions: {},
-      modules: { webgl: webglStore },
-      strict: false
-    }))
-  )
-}
+export const getters = {}
 
-export default initStore
+export const actions = {}

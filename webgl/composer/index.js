@@ -1,49 +1,27 @@
-import Events from 'events'
-import { WEBGL } from 'three/examples/jsm/WebGL.js'
 import { EffectComposer, EffectPass, RenderPass } from 'postprocessing'
 
 import AntialiasingEffect from './effects/antialiasing'
 
-import viewport from '@/plugins/viewport'
 import raf from '@/plugins/raf'
+import viewport from '@/plugins/viewport'
 import gui from '@/plugins/gui'
 
 export default class Renderer {
-  constructor({ canvas, scene, camera }) {
-    this.canvas = canvas
-    this.scene = scene
+  constructor({ renderer, camera, scene }) {
+    this.renderer = renderer
     this.camera = camera
+    this.scene = scene
 
-    this.events = new Events()
-
-    // rendering scale
-    this.scale = 1
-
-    // WEBGL 2
-    const context = this.canvas.getContext(
-      WEBGL.isWebGL2Available() ? 'webgl2' : 'webgl',
-      { alpha: false }
-    )
-
-    // renderer
-    this.renderer = new THREE.WebGLRenderer({
-      canvas: this.canvas,
-      context,
-      scene: this.scene,
-      powerPreference: 'high-performance',
-      preserveDrawingBuffer: true
-      // alpha: true
-    })
-    this.renderer.setSize(viewport.width, viewport.height)
-    this.renderer.setPixelRatio = window.devicePixelRatio || 1
+    this.renderingScale = 1
 
     this.init()
-    raf.add('webgl', this.loop.bind(this), { index: 2 })
   }
 
   async init() {
     await this.initComposer()
     this.initGUI()
+
+    raf.add('renderer', this.render.bind(this), 0)
   }
 
   async initComposer() {
@@ -51,14 +29,26 @@ export default class Renderer {
 
     // composer
     this.composer = new EffectComposer(this.renderer)
+
+    // passes
     this.effectPass = new EffectPass(
       this.camera,
       this.antialiasingEffect.smaaEffect
     )
 
-    // this.effectPass.renderToScreen = true
+    // addPasses
     this.composer.addPass(new RenderPass(this.scene, this.camera))
     this.composer.addPass(this.effectPass)
+  }
+
+  render(deltaTime) {
+    this.renderer.setSize(
+      viewport.width * this.renderingScale,
+      viewport.height * this.renderingScale
+    )
+    this.renderer.setPixelRatio = window.devicePixelRatio || 1
+
+    this.composer.render(deltaTime)
   }
 
   initGUI() {
@@ -96,27 +86,9 @@ export default class Renderer {
     })
 
     gui.rendering
-      .add(this, 'scale')
+      .add(this, 'renderingScale')
       .min(0.2)
       .max(1)
       .step(0.1)
-  }
-
-  loop({ deltaTime, time }) {
-    this.renderer.setSize(
-      viewport.width * this.scale,
-      viewport.height * this.scale
-    )
-    this.render({ deltaTime, time })
-  }
-
-  render({ deltaTime, time }) {
-    if (this.composer) {
-      this.composer.render(deltaTime)
-    } else {
-      this.renderer.render(this.scene, this.camera)
-    }
-
-    this.events.emit('render', this.renderer)
   }
 }

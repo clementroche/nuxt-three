@@ -1,111 +1,71 @@
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import useWebGL from '@/hooks/use-webgl'
 
-import viewport from '@/plugins/viewport'
-import gui from '@/plugins/gui'
+class WebGL {
+  constructor() {
+    const { scene } = useWebGL()
 
-import Renderer from '@/webgl/renderer/renderer'
-import raycaster from '@/webgl/raycaster'
-import rendererStats from '@/webgl/renderer-stats'
+    this.group = new THREE.Object3D()
+    this.group.scale.setScalar(250)
 
-import getStore from '@/store'
-const store = getStore()
+    scene.add(this.group)
 
-export class WebGL {
-  constructor(canvas) {
-    // canvas
-    this.canvas = canvas
-
-    // scene
-    this.scene = new THREE.Scene()
-
-    // camera
-    this.camera = new THREE.OrthographicCamera(
-      viewport.width / -2,
-      viewport.width / 2,
-      viewport.height / 2,
-      viewport.height / -2,
-      -10000,
-      10000
-    )
-    this.camera.position.set(500, 500, 500)
-    this.camera.lookAt(this.scene.position)
-
-    // controls
-    this.cameraControls = new OrbitControls(
-      this.camera,
-      document.getElementById('__nuxt')
-    )
-
-    // renderer
-    this.renderer = new Renderer({
-      canvas: this.canvas,
-      camera: this.camera,
-      scene: this.scene
-    })
-    store.commit('webgl/setRenderer', this.renderer)
-
-    this.addCube()
+    this.init()
   }
 
   init() {
-    this.initEvents()
-    this.initGUI()
+    this.initCamera()
+
+    this.addBox()
   }
 
-  initEvents() {
-    viewport.events.on('resize', this.onWindowResize.bind(this))
-    this.renderer.events.on('render', (renderer) => {
-      rendererStats.update(renderer.info)
-    })
+  initCamera() {
+    const { scene, camera } = useWebGL()
+
+    camera.position.set(500, 500, 500)
+    camera.lookAt(scene.position)
   }
 
-  initGUI() {
-    gui.camera.add(this.cameraControls, 'enabled').name('controls')
-  }
-
-  addCube() {
+  addBox() {
     const geometry = new THREE.BoxGeometry(1, 1, 1)
     const material = new THREE.MeshNormalMaterial()
-    this.cube = new THREE.Mesh(geometry, material)
-    this.cube.scale.setScalar(200)
+    const cube = new THREE.Mesh(geometry, material)
+    this.group.add(cube)
 
-    this.scene.add(this.cube)
+    const { raycaster } = useWebGL()
 
-    raycaster.addTarget(this.cube)
+    raycaster.addTarget(cube)
 
     raycaster.events.on('intersection', (intersections) => {
-      const cubeIntersection = intersections.find(
-        (intersection) => intersection.object.uuid === this.cube.uuid
+      const cubeIsIntersected = intersections.filter(
+        (intersection) => intersection.object.uuid === cube.uuid
       )
 
-      if (cubeIntersection) {
-        this.cube.scale.setScalar(250)
+      if (cubeIsIntersected[0]) {
+        cube.scale.setScalar(1.1)
       } else {
-        this.cube.scale.setScalar(200)
+        cube.scale.setScalar(1)
       }
     })
   }
 
-  onWindowResize() {
-    this.camera.left = viewport.width / -2
-    this.camera.right = viewport.width / 2
-    this.camera.top = viewport.height / 2
-    this.camera.bottom = viewport.height / -2
-    this.camera.updateProjectionMatrix()
+  destroy() {
+    const { scene } = useWebGL()
+    scene.remove(this.group)
   }
 }
 
 export default ({ app }, inject) => {
-  inject('getWebGL', () => {
+  inject('getWebgl', () => {
+    return app.$webgl || app.$createWebgl()
+  })
+
+  inject('createWebgl', () => {
+    app.$webgl = new WebGL()
     return app.$webgl
   })
 
-  inject('createWebGL', (canvas) => {
-    app.$webgl = new WebGL(canvas)
-    return app.$webgl
-  })
-
-  inject('destroyWebGL', () => {
+  inject('destroyWebgl', () => {
+    app.$webgl.destroy()
     app.$webgl = null
   })
 }

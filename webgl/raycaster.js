@@ -2,11 +2,10 @@ import Events from 'events'
 
 import mouse from '@/plugins/mouse'
 
-import getStore from '@/store'
-const store = getStore()
+export default class Raycaster {
+  constructor(camera) {
+    this.camera = camera
 
-class Raycaster {
-  constructor() {
     this.raycaster = new THREE.Raycaster()
 
     this.targets = {}
@@ -27,11 +26,6 @@ class Raycaster {
   }
 
   raycast() {
-    const camera = store.getters['webgl/rendererCamera']
-    if (!camera) return
-
-    this.raycaster.setFromCamera(mouse.normalized, camera)
-
     this.raycaster.setFromCamera(mouse.normalized, this.camera)
 
     const intersects = this.raycaster.intersectObjects(
@@ -42,5 +36,3 @@ class Raycaster {
     this.events.emit('intersection', intersects)
   }
 }
-
-export default new Raycaster()

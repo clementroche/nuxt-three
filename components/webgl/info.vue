@@ -1,10 +1,10 @@
 <template>
-  <div v-if="info" class="rendererInfo">
-    <div>calls: {{ info.render.calls }}</div>
-    <div>triangles: {{ info.render.triangles }}</div>
-    <div>geometries: {{ info.memory.geometries }}</div>
-    <div>textures: {{ info.memory.textures }}</div>
-    <div>programs: {{ info.programs.length }}</div>
+  <div v-if="rendererInfo" class="rendererInfo">
+    <div>calls: {{ rendererInfo.render.calls }}</div>
+    <div>triangles: {{ rendererInfo.render.triangles }}</div>
+    <div>geometries: {{ rendererInfo.memory.geometries }}</div>
+    <div>textures: {{ rendererInfo.memory.textures }}</div>
+    <div>programs: {{ rendererInfo.programs.length }}</div>
   </div>
 </template>
 
@@ -14,18 +14,12 @@ import useWebGL from '@/hooks/use-webgl'
 export default {
   data() {
     return {
-      renderer: null,
-      info: null
-    }
-  },
-  watch: {
-    'renderer.info.render.frame'() {
-      this.info = this.renderer.info
+      rendererInfo: null
     }
   },
   mounted() {
     const { renderer } = useWebGL()
-    this.renderer = renderer
+    this.rendererInfo = renderer.info
   }
 }
 </script>

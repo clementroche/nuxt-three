@@ -106,5 +106,13 @@ export default class Renderer {
       .min(0.2)
       .max(1)
       .step(0.1)
+
+    const rgbGUI = gui.postprocessing.addFolder('Chromatic Aberration')
+    rgbGUI
+      .add(this.chromaticAberrationEffect.uniforms.get('offset').value, 'x')
+      .step(0.001)
+    rgbGUI
+      .add(this.chromaticAberrationEffect.uniforms.get('offset').value, 'y')
+      .step(0.001)
   }
 }

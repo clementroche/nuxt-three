@@ -118,10 +118,6 @@ export default {
     },
     initMesh() {
       this.texture = new THREE.CanvasTexture(this.canvas)
-      this.texture.wrapS = THREE.ClampToEdgeWrapping
-      this.texture.wrapT = THREE.ClampToEdgeWrapping
-      this.texture.minFilter = THREE.NearestFilter
-      this.texture.magFilter = THREE.LinearFilter
       this.material = new THREE.SpriteMaterial({ map: this.texture })
       this.mesh = new THREE.Sprite(this.material)
 

@@ -1,12 +1,17 @@
 <template>
-  <h1>nuxt-three</h1>
+  <div class="appIndex">
+    <app-title />
+  </div>
 </template>
 
-<style lang="scss">
-h1 {
-  color: var(--color-white);
-  font-family: var(--font-tobias-heavy);
-  font-size: var(--font-size-xl);
-  text-align: center;
+<script>
+import AppTitle from '@/components/app/title'
+
+export default {
+  components: {
+    AppTitle
+  }
 }
-</style>
+</script>
+
+<style lang="scss"></style>

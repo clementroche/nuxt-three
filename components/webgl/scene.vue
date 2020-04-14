@@ -32,14 +32,7 @@ export default {
       this.DOMScene = new THREE.Group()
       this.DOMScene.scale.setScalar(250)
       scene.add(this.DOMScene)
-      this.initCamera()
       this.addBox()
-    },
-    initCamera() {
-      const { scene, camera } = useWebGL()
-
-      camera.position.set(500, 500, 500)
-      camera.lookAt(scene.position)
     },
     addBox() {
       const { raycaster } = useWebGL()

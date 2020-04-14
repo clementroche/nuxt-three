@@ -26,13 +26,13 @@ class WebGL {
     )
 
     // camera controls
-    const {
-      OrbitControls
-    } = require('three/examples/jsm/controls/OrbitControls.js')
-    this.cameraControls = new OrbitControls(
-      this.camera,
-      document.getElementById('__nuxt')
-    )
+    // const {
+    //   OrbitControls
+    // } = require('three/examples/jsm/controls/OrbitControls.js')
+    // this.cameraControls = new OrbitControls(
+    //   this.camera,
+    //   document.getElementById('__nuxt')
+    // )
 
     // canvas
     this.canvas = document.createElement('canvas')

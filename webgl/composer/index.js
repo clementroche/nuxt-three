@@ -1,9 +1,14 @@
-import { EffectComposer, EffectPass, RenderPass } from 'postprocessing'
+import {
+  EffectComposer,
+  EffectPass,
+  RenderPass,
+  ChromaticAberrationEffect
+} from 'postprocessing'
 
 import AntialiasingEffect from './effects/antialiasing'
 
 import viewport from '@/plugins/viewport'
-import gui from '@/plugins/gui'
+import useGUI from '@/hooks/use-gui'
 
 export default class Renderer {
   constructor({ renderer, camera, scene }) {
@@ -22,20 +27,28 @@ export default class Renderer {
   }
 
   async initComposer() {
+    // effects
     this.antialiasingEffect = await new AntialiasingEffect()
+    this.chromaticAberrationEffect = new ChromaticAberrationEffect()
 
     // composer
     this.composer = new EffectComposer(this.renderer)
 
     // passes
-    this.effectPass = new EffectPass(
+    this.antialiasingPass = new EffectPass(
       this.camera,
       this.antialiasingEffect.smaaEffect
     )
 
+    this.chromaticAberrationPass = new EffectPass(
+      this.camera,
+      this.chromaticAberrationEffect
+    )
+
     // addPasses
     this.composer.addPass(new RenderPass(this.scene, this.camera))
-    this.composer.addPass(this.effectPass)
+    this.composer.addPass(this.antialiasingPass)
+    this.composer.addPass(this.chromaticAberrationPass)
   }
 
   render(deltaTime) {
@@ -45,10 +58,16 @@ export default class Renderer {
     )
     this.renderer.setPixelRatio = window.devicePixelRatio || 1
 
-    this.composer.render(deltaTime)
+    if (this.composer) {
+      this.composer.render(deltaTime)
+    } else {
+      this.renderer.render(this.scene, this.camera)
+    }
   }
 
   initGUI() {
+    const gui = useGUI()
+
     const composer = this.composer
     const renderer = composer.getRenderer()
     const context = renderer.getContext()

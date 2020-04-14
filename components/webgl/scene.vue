@@ -17,13 +17,53 @@ export default {
     const { canvas } = useWebGL()
     this.$el.appendChild(canvas)
 
-    this.$createWebgl()
+    this.init()
   },
   beforeDestroy() {
     const { destroy } = useWebGL()
     destroy()
 
-    this.$destroyWebgl()
+    // this.$destroyWebgl()
+  },
+  methods: {
+    init() {
+      const { scene } = useWebGL()
+
+      this.DOMScene = new THREE.Group()
+      this.DOMScene.scale.setScalar(250)
+      scene.add(this.DOMScene)
+      this.initCamera()
+      this.addBox()
+    },
+    initCamera() {
+      const { scene, camera } = useWebGL()
+
+      camera.position.set(500, 500, 500)
+      camera.lookAt(scene.position)
+    },
+    addBox() {
+      const { raycaster } = useWebGL()
+
+      const geometry = new THREE.BoxGeometry(1, 1, 1)
+      const material = new THREE.MeshNormalMaterial()
+      const cube = new THREE.Mesh(geometry, material)
+
+      this.DOMScene.add(cube)
+
+      raycaster.addTarget(cube)
+
+      raycaster.events.on('intersection', (intersections) => {
+        const cubeIsIntersected = intersections.filter(
+          (intersection) => intersection.object.uuid === cube.uuid
+        )
+
+        if (cubeIsIntersected[0]) {
+          cube.scale.setScalar(1.1)
+        } else {
+          cube.scale.setScalar(1)
+        }
+      })
+    }
   }
 }
 </script>

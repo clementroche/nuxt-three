@@ -2,12 +2,12 @@ import {
   SMAAEffect,
   SMAAImageLoader,
   SMAAPreset,
-  EdgeDetectionMode,
+  EdgeDetectionMode
   // TextureEffect,
-  BlendFunction
+  // BlendFunction
 } from 'postprocessing'
 
-import gui from '@/plugins/gui'
+import useGUI from '@/hooks/use-gui'
 
 export default class AntialiasingEffect {
   constructor() {
@@ -17,7 +17,7 @@ export default class AntialiasingEffect {
           this.assets.get('smaa-search'),
           this.assets.get('smaa-area'),
           SMAAPreset.HIGH,
-          EdgeDetectionMode.DEPTH
+          EdgeDetectionMode.COLOR
         )
 
         // this.edgesTextureEffect = new TextureEffect({
@@ -63,9 +63,10 @@ export default class AntialiasingEffect {
   }
 
   initGUI() {
+    const gui = useGUI()
     const antialising = gui.postprocessing.addFolder('Antialiasing')
 
-    const effectPass = this.effectPass
+    // const effectPass = this.effectPass
 
     const smaaEffect = this.smaaEffect
     // const edgesTextureEffect = this.edgesTextureEffect
@@ -137,9 +138,9 @@ export default class AntialiasingEffect {
         smaaEffect.blendMode.opacity.value = params.smaa.opacity
       })
 
-    antialising.add(params.smaa, 'blend mode', BlendFunction).onChange(() => {
-      smaaEffect.blendMode.blendFunction = Number(params.smaa['blend mode'])
-      effectPass.recompile()
-    })
+    // antialising.add(params.smaa, 'blend mode', BlendFunction).onChange(() => {
+    //   smaaEffect.blendMode.blendFunction = Number(params.smaa['blend mode'])
+    //   effectPass.recompile()
+    // })
   }
 }

@@ -1,0 +1,22 @@
+[style*='--aspect-ratio']::before,
+[style*='--aspect-ratio'] > :first-child {
+  width: 100%;
+}
+
+[style*='--aspect-ratio'] > :first-child {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+}
+
+[style*='--aspect-ratio'] {
+  position: relative;
+}
+
+[style*='--aspect-ratio']::before {
+  --aspect-ratio-divider: calc(var(--aspect-ratio));
+  content: '';
+  display: block;
+  padding-bottom: calc(100% / var(--aspect-ratio-divider));
+}

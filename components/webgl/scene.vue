@@ -1,17 +1,17 @@
 <template>
   <div id="appScene">
-    <Info />
+    <webgl-info />
   </div>
 </template>
 
 <script>
 import useWebGL from '@/hooks/use-webgl'
 
-import Info from '@/components/webgl/info'
+import WebglInfo from '@/components/webgl/info'
 
 export default {
   components: {
-    Info
+    WebglInfo
   },
   mounted() {
     const { canvas } = useWebGL()

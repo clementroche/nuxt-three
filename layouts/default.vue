@@ -1,15 +1,15 @@
 <template>
   <div>
     <nuxt />
-    <Scene />
+    <webgl-scene />
   </div>
 </template>
 
 <script>
-import Scene from '@/components/webgl/scene'
+import WebglScene from '@/components/webgl/scene'
 export default {
   components: {
-    Scene
+    WebglScene
   }
 }
 </script>

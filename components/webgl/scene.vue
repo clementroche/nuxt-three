@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import useWebGL from '@/hooks/use-webgl'
+
 import Info from '@/components/webgl/info'
 
 export default {
@@ -12,18 +14,20 @@ export default {
     Info
   },
   mounted() {
-    const { canvas } = this.$useWebGL()
+    const { canvas } = useWebGL()
     this.$el.appendChild(canvas)
 
     this.init()
   },
   beforeDestroy() {
-    const { destroy } = this.$useWebGL()
+    const { destroy } = useWebGL()
     destroy()
+
+    // this.$destroyWebgl()
   },
   methods: {
     init() {
-      const { scene } = this.$useWebGL()
+      const { scene } = useWebGL()
 
       this.DOMScene = new THREE.Group()
       this.DOMScene.scale.setScalar(250)
@@ -32,13 +36,13 @@ export default {
       this.addBox()
     },
     initCamera() {
-      const { scene, camera } = this.$useWebGL()
+      const { scene, camera } = useWebGL()
 
       camera.position.set(500, 500, 500)
       camera.lookAt(scene.position)
     },
     addBox() {
-      const { raycaster } = this.$useWebGL()
+      const { raycaster } = useWebGL()
 
       const geometry = new THREE.BoxGeometry(1, 1, 1)
       const material = new THREE.MeshNormalMaterial()

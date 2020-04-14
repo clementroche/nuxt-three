@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import useWebGL from '@/hooks/use-webgl'
+
 export default {
   data() {
     return {
@@ -16,7 +18,7 @@ export default {
     }
   },
   mounted() {
-    const { renderer } = this.$useWebGL()
+    const { renderer } = useWebGL()
     this.rendererInfo = renderer.info
   }
 }

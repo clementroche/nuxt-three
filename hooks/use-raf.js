@@ -1,4 +1,4 @@
-export default class Raf {
+class RAF {
   constructor(clock = new THREE.Clock()) {
     this.rafs = {}
     this.isRunning = false
@@ -64,3 +64,10 @@ export default class Raf {
     }
   }
 }
+let raf
+
+const useRAF = () => {
+  return raf || (raf = new RAF())
+}
+
+export default useRAF

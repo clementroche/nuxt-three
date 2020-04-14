@@ -1,17 +1,16 @@
 import Stats from 'stats.js'
 
 import viewport from '@/plugins/viewport'
-import Raf from '@/plugins/raf.js'
+import useRAF from '@/hooks/use-raf.js'
 
 let webgl
 
 class WebGL {
   constructor() {
+    const RAF = useRAF()
+
     // clock
     this.clock = new THREE.Clock()
-
-    // raf
-    this.raf = new Raf(this.clock)
 
     // scene
     this.scene = new THREE.Scene()
@@ -65,8 +64,8 @@ class WebGL {
     // stats
     this.stats = new Stats()
     document.body.appendChild(this.stats.dom)
-    this.raf.add('stats-begin', this.stats.begin, -1000)
-    this.raf.add('stats-end', this.stats.end, 1000)
+    RAF.add('stats-begin', this.stats.begin, -1000)
+    RAF.add('stats-end', this.stats.end, 1000)
 
     // raycaster
     const Raycaster = require('@/webgl/raycaster').default
@@ -76,7 +75,7 @@ class WebGL {
     viewport.events.on('resize', this.onWindowResize.bind(this))
 
     // raf
-    this.raf.add('use-webgl', this.loop.bind(this), 0)
+    RAF.add('use-webgl', this.loop.bind(this), 0)
   }
 
   loop(clock) {

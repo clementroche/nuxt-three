@@ -36,6 +36,8 @@ const mouse = new Vue({
   },
   methods: {
     onMouseMove(e) {
+      const event = e
+
       if (e.changedTouches && e.changedTouches.length) {
         e.x = e.changedTouches[0].pageX
         e.y = e.changedTouches[0].pageY
@@ -74,6 +76,12 @@ const mouse = new Vue({
       this.velocity.y = deltaY / delta
 
       this.velocity.needsUpdate = true
+
+      this.events.emit('mousemove', {
+        ...this.$data,
+        ...this.computed,
+        event
+      })
     }
   }
 })

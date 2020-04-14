@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 import Stats from 'stats.js'
 
 import viewport from '@/plugins/viewport'
@@ -113,4 +115,5 @@ const useWebGL = () => {
   return webgl || (webgl = new WebGL())
 }
 
+Vue.prototype.$useWebGL = useWebGL
 export default useWebGL

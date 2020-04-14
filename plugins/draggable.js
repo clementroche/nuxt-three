@@ -1,3 +1,5 @@
+// TODO convert to directive
+
 import Events from 'events'
 
 let onMouseDownHandler

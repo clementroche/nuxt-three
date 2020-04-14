@@ -2,7 +2,6 @@ import { EffectComposer, EffectPass, RenderPass } from 'postprocessing'
 
 import AntialiasingEffect from './effects/antialiasing'
 
-import raf from '@/plugins/raf'
 import viewport from '@/plugins/viewport'
 import gui from '@/plugins/gui'
 
@@ -20,8 +19,6 @@ export default class Renderer {
   async init() {
     await this.initComposer()
     this.initGUI()
-
-    raf.add('renderer', this.render.bind(this), 0)
   }
 
   async initComposer() {

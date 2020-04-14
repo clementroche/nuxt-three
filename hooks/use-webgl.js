@@ -1,7 +1,7 @@
 import Stats from 'stats.js'
 
 import viewport from '@/plugins/viewport'
-import raf from '@/plugins/raf'
+import Raf from '@/plugins/raf.js'
 
 let webgl
 
@@ -9,6 +9,9 @@ class WebGL {
   constructor() {
     // clock
     this.clock = new THREE.Clock()
+
+    // raf
+    this.raf = new Raf(this.clock)
 
     // scene
     this.scene = new THREE.Scene()
@@ -46,9 +49,7 @@ class WebGL {
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
       context,
-      scene: this.scene,
-      powerPreference: 'high-performance',
-      preserveDrawingBuffer: true
+      scene: this.scene
     })
     this.renderer.setSize(viewport.width, viewport.height)
     this.renderer.setPixelRatio = window.devicePixelRatio || 1
@@ -64,8 +65,8 @@ class WebGL {
     // stats
     this.stats = new Stats()
     document.body.appendChild(this.stats.dom)
-    raf.add('stats-begin', this.stats.begin, -1000)
-    raf.add('stats-end', this.stats.end, 1000)
+    this.raf.add('stats-begin', this.stats.begin, -1000)
+    this.raf.add('stats-end', this.stats.end, 1000)
 
     // raycaster
     const Raycaster = require('@/webgl/raycaster').default
@@ -73,6 +74,13 @@ class WebGL {
 
     // events
     viewport.events.on('resize', this.onWindowResize.bind(this))
+
+    // raf
+    this.raf.add('use-webgl', this.loop.bind(this), 0)
+  }
+
+  loop(clock) {
+    this.composer.render(clock)
   }
 
   get viewsize() {

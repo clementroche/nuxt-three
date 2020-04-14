@@ -1,25 +1,19 @@
-// import Stats from 'stats.js'
-
-// import clock from '@/plugins/clock'
-
-class Raf {
-  constructor() {
+export default class Raf {
+  constructor(clock = new THREE.Clock()) {
     this.rafs = {}
     this.isRunning = false
-
-    this.clock = new THREE.Clock()
-
-    // this.stats = new Stats()
-    // document.body.appendChild(this.stats.dom)
+    this.clock = clock
+    this.paused = false
   }
 
   loop() {
-    // this.stats.begin()
+    if (this.paused && !this.isRunning) return
 
     this.isRunning = true
 
     // clock
     const deltaTime = this.clock.getDelta()
+    const time = this.clock.getElapsedTime()
 
     // callbacks
     Object.values(this.rafs)
@@ -27,10 +21,8 @@ class Raf {
         return a.priority - b.priority
       })
       .forEach((raf) => {
-        raf.callback(deltaTime)
+        raf.callback({ time, deltaTime })
       })
-
-    // this.stats.end()
 
     this.rafId = requestAnimationFrame(this.loop.bind(this))
   }
@@ -47,6 +39,19 @@ class Raf {
     }
   }
 
+  set pause(bool) {
+    this.paused = bool
+    this.isRunning = !bool
+
+    if (bool) {
+      this.clock.stop()
+      cancelAnimationFrame(this.rafId)
+    } else {
+      this.clock.start()
+      this.loop()
+    }
+  }
+
   remove(id) {
     if (!this.rafs[id]) {
       console.warn(`raf.remove(): ${id} callback doesn't exist`)
@@ -59,5 +64,3 @@ class Raf {
     }
   }
 }
-
-export default new Raf()

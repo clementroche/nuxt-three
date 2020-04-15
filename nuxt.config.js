@@ -88,12 +88,9 @@ export default {
    ** Plugins to load before mounting the App
    */
   plugins: [
-    { src: '~/plugins/events.js', mode: 'client' },
-    { src: '~/plugins/viewport.js', mode: 'client' },
-    { src: '~/plugins/mouse.js', mode: 'client' },
-    { src: '~/plugins/scroll.js', mode: 'client' },
-    { src: '~/plugins/directives.js', mode: 'client' },
-    { src: '~/hooks/use-webgl.js', mode: 'client' }
+    { src: '~/plugins/viewport.client.js' },
+    { src: '~/plugins/mouse.client.js' },
+    { src: '~/plugins/directives.client.js' }
   ],
   /*
    ** Nuxt.js dev-modules
@@ -129,11 +126,7 @@ export default {
     '@nuxtjs/style-resources',
     '@nuxtjs/device'
   ],
-  router: {
-    // scrollBehavior(to, from, savedPosition) {
-    //   return { x: 0, y: 0 }
-    // }
-  },
+  router: {},
   /*
    ** Build configuration
    */

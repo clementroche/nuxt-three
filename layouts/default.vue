@@ -7,6 +7,7 @@
 
 <script>
 import WebglScene from '@/components/webgl/scene'
+
 export default {
   components: {
     WebglScene

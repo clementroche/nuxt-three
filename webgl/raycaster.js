@@ -1,6 +1,6 @@
 import Events from 'events'
 
-import mouse from '@/plugins/mouse'
+import mouse from '@/plugins/mouse.client'
 
 export default class Raycaster {
   constructor(camera) {

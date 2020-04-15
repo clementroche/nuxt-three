@@ -1,7 +1,7 @@
 import Events from 'events'
 import gsap from 'gsap'
 import Vue from 'vue'
-import viewport from '@/plugins/viewport'
+import viewport from '@/plugins/viewport.client'
 
 // https://github.com/oframe/ogl/blob/master/examples/mouse-flowmap.html
 

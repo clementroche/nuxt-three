@@ -1,7 +1,7 @@
 <template>
   <component
-    :is="'h1'"
     ref="text"
+    :is="tag"
     :class="{ 'webglText--loaded': loaded }"
     :style="{
       'font-size': fontSize,
@@ -22,6 +22,10 @@ import useRAF from '@/hooks/use-raf'
 
 export default {
   props: {
+    tag: {
+      type: String,
+      default: 'div'
+    },
     text: {
       type: String,
       default: ''

@@ -74,6 +74,10 @@ export default {
       this.drawText()
     }
   },
+  beforeDestroy() {
+    const { scene } = useWebgl()
+    scene.remove(this.webglWrapper)
+  },
   methods: {
     updateBoundingRect() {
       this.boundingRect = this.$refs.text.getBoundingClientRect()
@@ -91,7 +95,7 @@ export default {
     },
     update() {
       const { x, y } = this.computePosition()
-      this.mesh.position.set(x, y, 0)
+      this.webglWrapper.position.set(x, y, 0)
 
       if (this.boundingRect.width !== 0 && this.boundingRect.height !== 0) {
         this.mesh.scale.set(
@@ -121,12 +125,16 @@ export default {
       this.context = this.canvas.getContext('2d')
     },
     initMesh() {
+      this.webglWrapper = new THREE.Group()
+
       this.texture = new THREE.CanvasTexture(this.canvas)
       this.material = new THREE.SpriteMaterial({ map: this.texture })
       this.mesh = new THREE.Sprite(this.material)
 
+      this.webglWrapper.add(this.mesh)
+
       const { scene } = useWebgl()
-      scene.add(this.mesh)
+      scene.add(this.webglWrapper)
     },
     drawText() {
       this.context.canvas.width = this.boundingRect.width

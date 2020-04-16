@@ -64,6 +64,7 @@ class RAF {
     }
   }
 }
+
 let raf
 
 const useRAF = () => {

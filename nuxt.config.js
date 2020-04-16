@@ -10,6 +10,9 @@ export default {
     fallback: ''
   },
   head: {
+    htmlAttrs: {
+      lang: 'en'
+    },
     title: 'nuxt-three',
     meta: [
       { charset: 'utf-8' },
@@ -17,30 +20,31 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: ''
-      },
-      {
-        ref: `canonical`,
-        href: ''
+        content: 'Nuxt.js - Three.js starter'
       },
       {
         hid: `og:title`,
         property: 'og:title',
-        content: ''
-      },
-      {
-        hid: `og:url`,
-        property: 'og:url',
-        content: ''
-      },
-      {
-        hid: `og:image`,
-        property: 'og:image',
-        content: ''
+        content: 'nuxt-three'
       },
       {
         hid: `og:description`,
         property: 'og:description',
+        content: 'Web app starter built on Nuxt.js and Three.js'
+      },
+      {
+        hid: 'og:type',
+        property: 'og:type',
+        content: 'website'
+      },
+      {
+        hid: `og:url`,
+        property: 'og:url',
+        content: 'https://github.com/clementroche/nuxt-three'
+      },
+      {
+        hid: `og:image`,
+        property: 'og:image',
         content: ''
       }
     ],
@@ -136,6 +140,10 @@ export default {
      */
     extend(config, ctx) {
       config.plugins.push(new webpack.ProvidePlugin({ THREE: 'three' }))
+      config.module.rules.push({
+        test: /\.(glsl|vs|fs)$/,
+        loader: 'raw-loader'
+      })
     },
     babel: {
       presets({ isServer }) {

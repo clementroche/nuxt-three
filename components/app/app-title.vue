@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import WebglText from '@/components/webgl/text'
+import WebglText from '@/components/webgl/webgl-text'
 
 export default {
   components: {

@@ -6,8 +6,10 @@
 
 <script>
 import useWebGL from '@/hooks/use-webgl'
+import useRAF from '@/hooks/use-raf'
+import useGUI from '@/hooks/use-gui'
 
-import WebglInfo from '@/components/webgl/info'
+import WebglInfo from '@/components/webgl/webgl-info'
 
 export default {
   components: {
@@ -20,42 +22,57 @@ export default {
     this.init()
   },
   beforeDestroy() {
-    const { destroy } = useWebGL()
-    destroy()
+    const RAF = useRAF()
+    RAF.remove('scene')
 
-    // this.$destroyWebgl()
+    useWebGL().destroy()
+    useGUI().destroy()
+  },
+  computed: {
+    mouse() {
+      return this.$mouse.hasMove
+        ? this.$mouse.lerpedNormalized
+        : new THREE.Vector2(0, 0)
+    }
   },
   methods: {
     init() {
       const { scene } = useWebGL()
+      const RAF = useRAF()
 
       this.DOMScene = new THREE.Group()
       this.DOMScene.scale.setScalar(250)
       scene.add(this.DOMScene)
       this.addBox()
+
+      RAF.add('scene', this.loop, 0)
     },
     addBox() {
       const { raycaster } = useWebGL()
 
       const geometry = new THREE.BoxGeometry(1, 1, 1)
       const material = new THREE.MeshNormalMaterial()
-      const cube = new THREE.Mesh(geometry, material)
+      this.cube = new THREE.Mesh(geometry, material)
 
-      this.DOMScene.add(cube)
+      this.DOMScene.add(this.cube)
 
-      raycaster.addTarget(cube)
+      raycaster.addTarget(this.cube)
 
       raycaster.events.on('intersection', (intersections) => {
-        const cubeIsIntersected = intersections.filter(
-          (intersection) => intersection.object.uuid === cube.uuid
+        const cubeIsIntersected = intersections.some(
+          (intersection) => intersection.object.uuid === this.cube.uuid
         )
 
-        if (cubeIsIntersected[0]) {
-          cube.scale.setScalar(1.1)
+        if (cubeIsIntersected) {
+          this.cube.scale.setScalar(1.1)
         } else {
-          cube.scale.setScalar(1)
+          this.cube.scale.setScalar(1)
         }
       })
+    },
+    loop() {
+      this.cube.rotation.x = -this.mouse.y * 0.1
+      this.cube.rotation.y = this.mouse.x * 0.1
     }
   }
 }

@@ -25,6 +25,8 @@ class WebGL {
       10000
     )
 
+    this.camera.position.set(0, 0, 500)
+
     // camera controls
     // const {
     //   OrbitControls
@@ -105,7 +107,10 @@ class WebGL {
     this.camera.updateProjectionMatrix()
   }
 
-  destroy() {}
+  destroy() {
+    const RAF = useRAF()
+    RAF.remove('use-webgl')
+  }
 }
 
 const useWebGL = () => {

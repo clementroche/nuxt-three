@@ -59,6 +59,10 @@ export default class Renderer {
     this.renderer.setPixelRatio = window.devicePixelRatio || 1
 
     if (this.composer) {
+      this.composer.setSize(
+        viewport.width * this.renderingScale,
+        viewport.height * this.renderingScale
+      )
       this.composer.render(deltaTime)
     } else {
       this.renderer.render(this.scene, this.camera)

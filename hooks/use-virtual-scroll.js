@@ -8,7 +8,6 @@ class VirtualScroll {
     this.virtualScroll = new VS({
       useKeyboard: false,
       mouseMultiplier: 0.5,
-      passive: true,
       firefoxMultiplier: 33
     })
 

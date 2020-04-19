@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import WebglScene from '@/components/webgl/scene'
+import WebglScene from '@/components/webgl/webgl-scene'
 
 export default {
   components: {

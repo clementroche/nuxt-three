@@ -20,6 +20,7 @@ module.exports = {
     'no-undef': 0,
     'new-cap': 0,
     'unicorn/number-literal-case': 0,
-    'vue/require-component-is': 0
+    'vue/require-component-is': 0,
+    'nuxt/no-globals-in-created': 0
   }
 }

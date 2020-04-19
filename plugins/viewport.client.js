@@ -1,7 +1,7 @@
 import Events from 'events'
 import Vue from 'vue'
 
-/*  eslint-disable */
+/* eslint-disable nuxt/no-env-in-hooks */
 
 const viewport = new Vue({
   data() {
@@ -17,7 +17,11 @@ const viewport = new Vue({
     this.events = new Events()
     this.events.setMaxListeners(50)
     this.onWindowResize()
-    window.addEventListener('resize', this.onWindowResize.bind(this), false)
+    window.addEventListener('resize', this.onWindowResize, false)
+  },
+  beforeDestroy() {
+    if (!process.client) return
+    window.removeEventListener('resize', this.onWindowResize, false)
   },
   methods: {
     onWindowResize() {
@@ -25,7 +29,8 @@ const viewport = new Vue({
       this.height = window.innerHeight
       this.ratio = this.width / this.height
 
-      let vh = this.height * 0.01
+      // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+      const vh = this.height * 0.01
       document.documentElement.style.setProperty('--vh', `${vh}px`)
 
       this.events.emit('resize', this.$data)

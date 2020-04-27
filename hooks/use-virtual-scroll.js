@@ -7,6 +7,7 @@ class VirtualScroll {
     const VS = require('virtual-scroll')
     this.virtualScroll = new VS({
       useKeyboard: false,
+      passive: false,
       mouseMultiplier: 0.5,
       firefoxMultiplier: 33
     })

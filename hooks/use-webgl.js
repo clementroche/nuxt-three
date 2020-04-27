@@ -1,6 +1,6 @@
 import Stats from 'stats.js'
 
-import viewport from '@/plugins/viewport.client'
+import viewport from '@/plugins/viewport'
 import useRAF from '@/hooks/use-raf.js'
 
 let webgl

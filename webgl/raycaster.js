@@ -1,6 +1,6 @@
 import Events from 'events'
 
-import mouse from '@/plugins/mouse.client'
+import mouse from '@/plugins/mouse'
 
 export default class Raycaster {
   constructor(camera) {
@@ -12,7 +12,8 @@ export default class Raycaster {
 
     this.events = new Events()
 
-    mouse.events.on('mousemove', this.raycast.bind(this))
+    mouse.events.on('mousemove', this.cast.bind(this, 'mousemove'))
+    window.addEventListener('click', this.cast.bind(this, 'click'), false)
   }
 
   addTarget(object) {
@@ -25,7 +26,7 @@ export default class Raycaster {
     delete this.targets[object.uuid]
   }
 
-  raycast() {
+  cast(eventType) {
     this.raycaster.setFromCamera(mouse.normalized, this.camera)
 
     const intersects = this.raycaster.intersectObjects(
@@ -33,6 +34,8 @@ export default class Raycaster {
       true
     )
 
-    this.events.emit('intersection', intersects)
+    console.log(eventType)
+
+    this.events.emit(eventType, intersects)
   }
 }

@@ -7,7 +7,7 @@ import {
 
 import AntialiasingEffect from './effects/antialiasing'
 
-import viewport from '@/plugins/viewport.client'
+import viewport from '@/plugins/viewport'
 import useGUI from '@/hooks/use-gui'
 
 export default class Renderer {

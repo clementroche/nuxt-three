@@ -1,8 +1,7 @@
 import Events from 'events'
 import gsap from 'gsap'
 import Vue from 'vue'
-import viewport from '@/plugins/viewport.client'
-import useRAF from '@/hooks/use-raf'
+import viewport from '@/plugins/viewport'
 
 /* eslint-disable nuxt/no-env-in-hooks */
 
@@ -37,9 +36,6 @@ const mouse = new Vue({
     window.addEventListener('touchstart', this.onMouseMove, false)
     window.addEventListener('touchmove', this.onMouseMove, false)
     window.addEventListener('mousemove', this.onMouseMove, false)
-
-    const RAF = useRAF()
-    RAF.add('mouse', this.loop, 0)
   },
   beforeDestroy() {
     if (!process.client) return
@@ -51,14 +47,6 @@ const mouse = new Vue({
     RAF.add('mouse')
   },
   methods: {
-    loop() {
-      // const velocity = this.velocity.clone()
-      // if (!velocity.needsUpdate) {
-      //   velocity.set(0, 0)
-      // }
-      // velocity.needsUpdate = false
-      // this.velocity.lerp(velocity, this.hasMove ? 0.5 : 0.1)
-    },
     onMouseMove(e) {
       const event = e
 
@@ -79,21 +67,6 @@ const mouse = new Vue({
         if (!this.lastPosition) this.lastPosition = new THREE.Vector2()
         this.lastPosition.set(evt.x, evt.y)
       }
-
-      // const deltaX = evt.x - this.lastPosition.x
-      // const deltaY = evt.y - this.lastPosition.y
-
-      // this.lastPosition.set(evt.x, evt.y)
-
-      // const time = performance.now()
-
-      // const delta = Math.max(14, time - this.lastTime)
-      // this.lastTime = time
-
-      // this.velocity.x = deltaX / delta
-      // this.velocity.y = deltaY / delta
-
-      // this.velocity.needsUpdate = true
 
       this.events.emit('mousemove', {
         ...this.$data,

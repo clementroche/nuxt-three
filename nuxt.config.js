@@ -80,7 +80,7 @@ export default {
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: '#fff' },
+  loading: false,
   /*
    ** Global CSS
    */
@@ -92,9 +92,9 @@ export default {
    ** Plugins to load before mounting the App
    */
   plugins: [
-    { src: '~/plugins/viewport.client.js' },
-    { src: '~/plugins/mouse.client.js' },
-    { src: '~/plugins/directives.client.js' }
+    { src: '~/plugins/viewport.js', mode: 'client' },
+    { src: '~/plugins/mouse.js', mode: 'client' },
+    { src: '~/plugins/directives.js', mode: 'client' }
   ],
   /*
    ** Nuxt.js dev-modules
@@ -127,8 +127,7 @@ export default {
       }
     ],
     '@nuxtjs/dotenv',
-    '@nuxtjs/style-resources',
-    '@nuxtjs/device'
+    '@nuxtjs/style-resources'
   ],
   router: {},
   /*

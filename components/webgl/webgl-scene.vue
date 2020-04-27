@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import gsap from 'gsap'
+
 import useWebGL from '@/hooks/use-webgl'
 import useRAF from '@/hooks/use-raf'
 import useGUI from '@/hooks/use-gui'
@@ -28,11 +30,23 @@ export default {
     useWebGL().destroy()
     useGUI().destroy()
   },
-  computed: {
-    mouse() {
-      return this.$mouse.hasMove
-        ? this.$mouse.lerpedNormalized
-        : new THREE.Vector2(0, 0)
+  data() {
+    return {
+      mouse: new THREE.Vector2()
+    }
+  },
+  watch: {
+    '$mouse.normalized': {
+      handler() {
+        const { x, y } = this.$mouse.normalized
+        gsap.to(this.mouse, {
+          ease: 'expo.out',
+          duration: 2,
+          x,
+          y
+        })
+      },
+      deep: true
     }
   },
   methods: {
@@ -58,16 +72,19 @@ export default {
 
       raycaster.addTarget(this.cube)
 
-      raycaster.events.on('intersection', (intersections) => {
+      raycaster.events.on('mousemove', (intersections) => {
         const cubeIsIntersected = intersections.some(
           (intersection) => intersection.object.uuid === this.cube.uuid
         )
 
-        if (cubeIsIntersected) {
-          this.cube.scale.setScalar(1.1)
-        } else {
-          this.cube.scale.setScalar(1)
-        }
+        const scale = cubeIsIntersected ? 1.1 : 1
+
+        gsap.to(this.cube.scale, {
+          duration: 2,
+          ease: 'expo.out',
+          x: scale,
+          y: scale
+        })
       })
     },
     loop() {

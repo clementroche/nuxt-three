@@ -34,8 +34,6 @@ export default class Raycaster {
       true
     )
 
-    console.log(eventType)
-
     this.events.emit(eventType, intersects)
   }
 }

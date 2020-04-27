@@ -126,7 +126,6 @@ export default {
         }
       }
     ],
-    '@nuxtjs/dotenv',
     '@nuxtjs/style-resources'
   ],
   router: {},

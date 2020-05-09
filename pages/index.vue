@@ -1,17 +1,23 @@
 <template>
   <div class="appIndex">
     <!-- <app-title /> -->
-    <scroller>
+    <scroller :draggable="true">
       <div class="appIndex__images">
-        <div
-          v-for="({ src, size }, index) in images"
+        <a
+          v-for="({ src, size, url }, index) in images"
           :key="index"
-          :style="{ '--aspect-ratio': size[0] / size[1] }"
-          style="width: 50vw;"
+          :style="{
+            '--aspect-ratio': size[0] / size[1]
+          }"
+          :href="url"
+          @dragstart.prevent=""
           class="appIndex__images__image"
+          target="_blank"
+          rel="noopener noreferrer"
+          draggable="false"
         >
           <webgl-image :src="src" />
-        </div>
+        </a>
       </div>
     </scroller>
   </div>
@@ -34,12 +40,34 @@ export default {
       mouse: new THREE.Vector2(),
       images: [
         {
-          src: '/images/analia-ferrario.jpg',
-          size: [1152, 864]
+          src:
+            'https://images.unsplash.com/photo-1589017243109-8c5a7eae105c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60',
+          size: [500, 658],
+          url: 'https://unsplash.com/photos/x1fb9pYxLhc'
         },
         {
-          src: '/images/andres-dallimonti.jpg',
-          size: [864, 1296]
+          src:
+            'https://images.unsplash.com/photo-1588952935630-aae2fe13e9c7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1268&q=80',
+          size: [1268, 949],
+          url: 'https://unsplash.com/photos/U_a3rB-lR0c'
+        },
+        {
+          src:
+            'https://images.unsplash.com/photo-1587408811730-1a978e6c407d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=631&q=80',
+          size: [631, 954],
+          url: 'https://unsplash.com/photos/ypsFFH-XRv0'
+        },
+        {
+          src:
+            'https://images.unsplash.com/photo-1588815379841-181f8e458f88?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80',
+          size: [1500, 1001],
+          url: 'https://unsplash.com/photos/q82LRv-lWbA'
+        },
+        {
+          src:
+            'https://images.unsplash.com/photo-1588817457154-b7a8a751afc2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
+          size: [634, 950],
+          url: 'https://unsplash.com/photos/ONAAeKbf96U'
         }
       ]
     }
@@ -110,16 +138,21 @@ export default {
 
 <style lang="scss">
 .appIndex {
+  cursor: grab;
+
   &__images {
     align-items: center;
     display: flex;
     flex-direction: column;
+    margin: auto;
     padding-bottom: 50vh;
     padding-top: 50vh;
     width: 100%;
+    width: 50vw;
 
     &__image {
       margin-bottom: 24px;
+      width: 100%;
     }
   }
 }

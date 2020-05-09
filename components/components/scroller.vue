@@ -2,10 +2,10 @@
   <div :class="{ 'scroller--disabled': !enabled }" class="scroller">
     <div
       ref="inner"
-      class="scroller__inner"
       :style="{
         transform: `translate(${scrollPosition.x}px,${scrollPosition.y}px)`
       }"
+      class="scroller__inner"
     >
       <slot />
     </div>

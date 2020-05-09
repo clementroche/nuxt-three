@@ -2,9 +2,6 @@ import webpack from 'webpack'
 
 export default {
   mode: 'universal',
-  /*
-   ** Headers of the page
-   */
   generate: {
     routes: [],
     fallback: ''
@@ -77,32 +74,18 @@ export default {
       }
     ]
   },
-  /*
-   ** Customize the progress-bar color
-   */
   loading: false,
-  /*
-   ** Global CSS
-   */
   css: ['@/assets/scss/index.scss'],
   styleResources: {
     scss: ['@/assets/scss/config.scss', '@/assets/scss/modules/index.scss']
   },
-  /*
-   ** Plugins to load before mounting the App
-   */
   plugins: [
     { src: '~/plugins/viewport.js', mode: 'client' },
     { src: '~/plugins/mouse.js', mode: 'client' },
     { src: '~/plugins/directives.js', mode: 'client' }
   ],
-  /*
-   ** Nuxt.js dev-modules
-   */
   buildModules: [
-    // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
-    // Doc: https://github.com/nuxt-community/stylelint-module
     [
       '@nuxtjs/stylelint-module',
       {
@@ -110,9 +93,6 @@ export default {
       }
     ]
   ],
-  /*
-   ** Nuxt.js modules
-   */
   modules: [
     '@nuxtjs/pwa',
     [
@@ -129,13 +109,7 @@ export default {
     '@nuxtjs/style-resources'
   ],
   router: {},
-  /*
-   ** Build configuration
-   */
   build: {
-    /*
-     ** You can extend webpack config here
-     */
     extend(config, ctx) {
       config.plugins.push(new webpack.ProvidePlugin({ THREE: 'three' }))
       config.module.rules.push({

@@ -1,7 +1,7 @@
 {
   "name": "nuxt-three",
   "version": "0.0.1",
-  "description": "template using nuxt.js and three.js",
+  "description": "web app template using nuxt.js and three.js",
   "author": "clementroche",
   "private": true,
   "scripts": {

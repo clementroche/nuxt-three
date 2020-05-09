@@ -3,4 +3,4 @@ Web app starter built on nuxt.js and three.js including SASS, GSAP, smooth scrol
 
 
 ## Demo
-[See the demo] (https://nuxt-three.netlify.app/)
+[See the demo](https://nuxt-three.netlify.app/)

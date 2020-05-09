@@ -14,6 +14,8 @@ class WebGL {
 
     // scene
     this.scene = new THREE.Scene()
+    this.DOMScene = new THREE.Group()
+    this.scene.add(this.DOMScene)
 
     // camera
     this.camera = new THREE.OrthographicCamera(
@@ -82,6 +84,7 @@ class WebGL {
 
   loop(clock) {
     this.composer.render(clock)
+    this.renderer.renderLists.dispose()
   }
 
   get viewsize() {
@@ -109,6 +112,8 @@ class WebGL {
 
   destroy() {
     const RAF = useRAF()
+    RAF.remove('stats-begin')
+    RAF.remove('stats-end')
     RAF.remove('use-webgl')
   }
 }

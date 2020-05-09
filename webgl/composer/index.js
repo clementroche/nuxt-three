@@ -16,8 +16,6 @@ export default class Renderer {
     this.camera = camera
     this.scene = scene
 
-    this.renderingScale = 1
-
     this.init()
   }
 
@@ -52,17 +50,11 @@ export default class Renderer {
   }
 
   render(deltaTime) {
-    this.renderer.setSize(
-      viewport.width * this.renderingScale,
-      viewport.height * this.renderingScale
-    )
+    this.renderer.setSize(viewport.width, viewport.height)
     this.renderer.setPixelRatio = window.devicePixelRatio || 1
 
     if (this.composer) {
-      this.composer.setSize(
-        viewport.width * this.renderingScale,
-        viewport.height * this.renderingScale
-      )
+      this.composer.setSize(viewport.width, viewport.height)
       this.composer.render(deltaTime)
     } else {
       this.renderer.render(this.scene, this.camera)
@@ -105,11 +97,11 @@ export default class Renderer {
           : 0
     })
 
-    gui.rendering
-      .add(this, 'renderingScale')
-      .min(0.2)
-      .max(1)
-      .step(0.1)
+    // gui.rendering
+    //   .add(this, 'renderingScale')
+    //   .min(0.2)
+    //   .max(1)
+    //   .step(0.1)
 
     const rgbGUI = gui.postprocessing.addFolder('Chromatic Aberration')
     rgbGUI

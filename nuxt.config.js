@@ -144,6 +144,7 @@ export default {
       })
     },
     babel: {
+      plugins: ['@babel/plugin-proposal-object-rest-spread'],
       presets({ isServer }) {
         return [
           [

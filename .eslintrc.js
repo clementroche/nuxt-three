@@ -17,6 +17,7 @@ module.exports = {
   plugins: ['prettier'],
   // add your custom rules here
   rules: {
+    'no-console': 0,
     'no-undef': 0,
     'new-cap': 0,
     'unicorn/number-literal-case': 0,

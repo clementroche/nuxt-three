@@ -1,8 +1,6 @@
-// TODO convert to directive
-
 import Events from 'events'
 
-export default class Draggable {
+export default class Dragger {
   constructor(container) {
     if (!container) return
     this.container = container

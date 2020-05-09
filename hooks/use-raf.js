@@ -11,12 +11,12 @@ const useRAF = () => {
     gsap.globalTimeline.pause()
 
     raf.add(
-      'use-raf',
+      'gsap',
       (clock) => {
         const time = gsap.globalTimeline.time()
         gsap.globalTimeline.time(time + clock.deltaTime)
       },
-      -1
+      -10
     )
   }
   return raf

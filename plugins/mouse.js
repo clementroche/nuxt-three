@@ -8,7 +8,7 @@ import viewport from '@/plugins/viewport'
 const mouse = new Vue({
   data() {
     return {
-      hasMove: false,
+      hasMoved: false,
       lerped: new THREE.Vector2(-1000, -1000),
       position: new THREE.Vector2(-1000, -1000),
       velocity: new THREE.Vector2(0, 0)
@@ -43,36 +43,27 @@ const mouse = new Vue({
     window.removeEventListener('touchstart', this.onMouseMove, false)
     window.removeEventListener('touchmove', this.onMouseMove, false)
     window.removeEventListener('mousemove', this.onMouseMove, false)
-
-    RAF.add('mouse')
   },
   methods: {
-    onMouseMove(e) {
-      const event = e
+    onMouseMove(event) {
+      const e = event.targetTouches ? event.targetTouches[0] : event
+      const { x, y } = e
 
-      this.hasMove = true
+      this.position.set(x, y)
 
-      const evt = e.targetTouches ? e.targetTouches[0] : e
-
-      this.position.set(evt.x, evt.y)
-
-      gsap.to(this.lerped, !this.lastTime ? 0 : 0.6, {
-        x: evt.x,
-        y: evt.y,
+      gsap.to(this.lerped, {
+        duration: !this.lastTime ? 0 : 0.6,
+        x,
+        y,
         ease: 'power4.out'
       })
 
-      if (!this.lastTime) {
-        this.lastTime = performance.now()
-        if (!this.lastPosition) this.lastPosition = new THREE.Vector2()
-        this.lastPosition.set(evt.x, evt.y)
-      }
-
       this.events.emit('mousemove', {
         ...this.$data,
-        ...this.computed,
-        event
+        originalEvent: e
       })
+
+      this.hasMoved = true
     }
   }
 })

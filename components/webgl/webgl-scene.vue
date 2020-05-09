@@ -17,19 +17,6 @@ export default {
   components: {
     WebglInfo
   },
-  mounted() {
-    const { canvas } = useWebGL()
-    this.$el.appendChild(canvas)
-
-    this.init()
-  },
-  beforeDestroy() {
-    const RAF = useRAF()
-    RAF.remove('scene')
-
-    useWebGL().destroy()
-    useGUI().destroy()
-  },
   data() {
     return {
       mouse: new THREE.Vector2()
@@ -49,14 +36,28 @@ export default {
       deep: true
     }
   },
+  mounted() {
+    const { canvas } = useWebGL()
+    this.$el.appendChild(canvas)
+
+    this.init()
+  },
+  beforeDestroy() {
+    const RAF = useRAF()
+    RAF.remove('scene')
+
+    const webGL = useWebGL()
+    webGL.destroy()
+
+    const GUI = useGUI()
+    GUI.destroy()
+  },
   methods: {
     init() {
-      const { scene } = useWebGL()
+      const { DOMScene } = useWebGL()
       const RAF = useRAF()
 
-      this.DOMScene = new THREE.Group()
-      this.DOMScene.scale.setScalar(250)
-      scene.add(this.DOMScene)
+      DOMScene.scale.setScalar(250)
       this.addBox()
 
       RAF.add('scene', this.loop, 0)
@@ -68,7 +69,8 @@ export default {
       const material = new THREE.MeshNormalMaterial()
       this.cube = new THREE.Mesh(geometry, material)
 
-      this.DOMScene.add(this.cube)
+      const { DOMScene } = useWebGL()
+      DOMScene.add(this.cube)
 
       raycaster.addTarget(this.cube)
 

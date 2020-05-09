@@ -1,3 +1,8 @@
 import Events from 'events'
+import Vue from 'vue'
 
-export default new Events()
+const events = new Events()
+
+Vue.prototype.$events = events
+
+export default events

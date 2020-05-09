@@ -80,9 +80,11 @@ export default {
     scss: ['@/assets/scss/config.scss', '@/assets/scss/modules/index.scss']
   },
   plugins: [
+    { src: '~/plugins/events.js', mode: 'client' },
     { src: '~/plugins/viewport.js', mode: 'client' },
     { src: '~/plugins/mouse.js', mode: 'client' },
-    { src: '~/plugins/directives.js', mode: 'client' }
+    { src: '~/plugins/directives.js', mode: 'client' },
+    { src: '~/plugins/components.js' }
   ],
   buildModules: [
     '@nuxtjs/eslint-module',

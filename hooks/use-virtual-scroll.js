@@ -1,29 +1,17 @@
-import Events from 'events'
+let virtualScroll
 
-class VirtualScroll {
-  constructor() {
-    this.events = new Events()
-
-    const VS = require('virtual-scroll')
-    this.virtualScroll = new VS({
+const useVirtualScroll = () => {
+  if (!virtualScroll) {
+    const VirtualScroll = require('virtual-scroll')
+    virtualScroll = new VirtualScroll({
       useKeyboard: false,
       passive: false,
       mouseMultiplier: 0.5,
       firefoxMultiplier: 33
     })
-
-    this.virtualScroll.on(this.onScroll.bind(this))
   }
 
-  onScroll(e) {
-    this.events.emit('scroll', e)
-  }
-}
-
-let scroll
-
-const useVirtualScroll = () => {
-  return scroll || (scroll = new VirtualScroll())
+  return virtualScroll
 }
 
 export default useVirtualScroll

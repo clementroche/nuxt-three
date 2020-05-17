@@ -22,10 +22,10 @@ export default {
     ...mapState({
       scrollPosition: (state) => state.scroll.position,
       initialScale() {
-        return this.$viewport.width * 0.2
+        return this.$viewport.width * 0.18
       },
       hoveredScale() {
-        return this.$viewport.width * 0.25
+        return this.$viewport.width * 0.22
       }
     })
   },
@@ -116,11 +116,19 @@ export default {
     text-transform: uppercase;
     top: 45vh;
     transform: translateX(-50%) translateY(-50%);
+    transition-duration: 1s;
+    transition-property: color, -webkit-text-stroke;
+    transition-timing-function: _ease('quint', 'out');
     white-space: nowrap;
 
     @include media('>l') {
       font-size: 125px;
       letter-spacing: 20px;
+    }
+
+    &:hover {
+      color: var(--color-white);
+      -webkit-text-stroke: 0 var(--color-transparent);
     }
   }
 }

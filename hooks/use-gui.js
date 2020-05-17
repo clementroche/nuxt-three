@@ -14,7 +14,7 @@ const useGUI = () => {
     gui.rendering = gui.addFolder('Rendering')
 
     // postprocessing
-    gui.postprocessing = gui.rendering.addFolder('Post-processing')
+    gui.postprocessing = gui.addFolder('Post-processing')
   }
 
   return gui

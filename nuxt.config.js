@@ -53,21 +53,7 @@ export default {
       },
       {
         rel: 'preload',
-        href: '/fonts/Tobias-Light/Tobias-Light.woff2',
-        as: 'font',
-        type: 'font/woff2',
-        crossorigin: 'anonymous'
-      },
-      {
-        rel: 'preload',
-        href: '/fonts/Tobias-Bold/Tobias-Bold.woff2',
-        as: 'font',
-        type: 'font/woff2',
-        crossorigin: 'anonymous'
-      },
-      {
-        rel: 'preload',
-        href: '/fonts/Tobias-Heavy/Tobias-Heavy.woff2',
+        href: '/fonts/GothamUltra/GothamUltra.woff2',
         as: 'font',
         type: 'font/woff2',
         crossorigin: 'anonymous'

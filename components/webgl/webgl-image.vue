@@ -1,9 +1,19 @@
 <template>
-  <div class="webglImage"></div>
+  <div
+    v-intersection-observer="{
+      triggerOnce: true,
+      onChange: (value) => {
+        inView = value
+      }
+    }"
+    class="webglImage"
+  >
+    <img :src="inView && !enabled ? src : ''" />
+  </div>
 </template>
 
 <script>
-import useWebgl from '@/hooks/use-webgl'
+import useWebGL from '@/hooks/use-webgl'
 import useRAF from '@/hooks/use-raf'
 
 import boundingRect from '@/mixins/boundingRect'
@@ -42,32 +52,38 @@ export default {
     objectFit: {
       type: String,
       default: 'cover'
+    },
+    enabled: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
     return { inView: undefined }
   },
   watch: {
-    inView: {
-      handler(val, oldVal) {
-        if (val) this.initTexture()
-      }
+    inView() {
+      if (this.inView) this.initTexture()
+    },
+    enabled() {
+      this.webglWrapper.visible = this.enabled
     }
   },
   mounted() {
     if (!this.lazyload) this.inView = true
 
     this.webglWrapper = new THREE.Group()
+    this.webglWrapper.visible = this.enabled
     this.initMesh()
 
-    const { DOMScene } = useWebgl()
+    const { DOMScene } = useWebGL()
     DOMScene.add(this.webglWrapper)
 
     const RAF = useRAF()
     RAF.add(this.webglWrapper.uuid, this.update, 0)
   },
   beforeDestroy() {
-    const { DOMScene } = useWebgl()
+    const { DOMScene } = useWebGL()
     DOMScene.remove(this.webglWrapper)
 
     this.geometry.dispose()
@@ -202,5 +218,14 @@ export default {
   height: 100%;
   position: relative;
   width: 100%;
+
+  img {
+    height: 100%;
+    width: 100%;
+
+    &[src=''] {
+      visibility: hidden;
+    }
+  }
 }
 </style>

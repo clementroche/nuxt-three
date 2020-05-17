@@ -79,7 +79,7 @@ class WebGL {
     viewport.events.on('resize', this.onWindowResize.bind(this))
 
     // raf
-    RAF.add('use-webgl', this.loop.bind(this), 0)
+    RAF.add('use-webgl', this.loop.bind(this), 1)
   }
 
   loop(clock) {

@@ -22,7 +22,7 @@ export default class Scroller {
 
     const RAF = useRAF()
     RAF.add('pre-scroller', this.preLoop.bind(this), -11)
-    RAF.add('scroller', this.loop.bind(this), 0)
+    RAF.add('scroller', this.loop.bind(this), 1)
   }
 
   reset() {
@@ -58,6 +58,8 @@ export default class Scroller {
   }
 
   onScroll({ deltaX, deltaY }) {
+    if (!this.enabled) return
+
     this.scrollPosition.x += deltaY + deltaX
     this.scrollPosition.x = Math.max(this.maxScroll.x, this.scrollPosition.x)
     this.scrollPosition.x = Math.min(0, this.scrollPosition.x)

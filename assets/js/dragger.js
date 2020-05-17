@@ -25,9 +25,10 @@ export default class Dragger {
   }
 
   onMouseDown(e) {
+    if (!this.enabled) return
     this.dragging = true
 
-    const evt = e.targetTouches ? e.targetTouches[0] : e
+    const evt = e.changedTouches ? e.changedTouches[0] : e
 
     this.draggingStartPosition = {
       x: evt.pageX,
@@ -39,11 +40,12 @@ export default class Dragger {
   }
 
   onMouseMove(e) {
+    if (!this.enabled) return
     if (!this.dragging) return
 
     const lastPosition = this.draggingCurrentPosition || { x: 0, y: 0 }
 
-    const evt = e.targetTouches ? e.targetTouches[0] : e
+    const evt = e.changedTouches ? e.changedTouches[0] : e
 
     this.draggingCurrentPosition = {
       x: evt.pageX,
@@ -63,9 +65,11 @@ export default class Dragger {
   }
 
   onMouseUp(e) {
+    if (!this.enabled) return
+
     this.dragging = false
 
-    const evt = e.targetTouches ? e.targetTouches[0] : e
+    const evt = e.changedTouches ? e.changedTouches[0] : e
 
     this.draggingFinishPosition = {
       x: evt.pageX,

@@ -3,9 +3,7 @@
 @include font-faces();
 
 :root {
-  --font-tobias-light: '#{nth($font-faces, 1)}', serif;
-  --font-tobias-bold: '#{nth($font-faces, 2)}', serif;
-  --font-tobias-heavy: '#{nth($font-faces, 3)}', serif;
+  --font-gotham-ultra: '#{nth($font-faces, 1)}', serif;
   @include colors-properties();
   @include responsive-properties();
 }

@@ -6,9 +6,10 @@ export default {
 
     const options = {
       root: params.root || null,
-      rootMargin: params.rootMargin || '0px',
+      rootMargin: params.rootMargin || '500px',
       threshold: params.threshold || 0
     }
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {

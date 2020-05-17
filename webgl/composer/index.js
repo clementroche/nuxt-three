@@ -5,7 +5,8 @@ import {
   ChromaticAberrationEffect
 } from 'postprocessing'
 
-import AntialiasingEffect from './effects/antialiasing'
+// import AntialiasingEffect from './effects/antialiasing'
+import BarrelEffect from './effects/barrel'
 
 import viewport from '@/plugins/viewport'
 import useGUI from '@/hooks/use-gui'
@@ -19,33 +20,37 @@ export default class Renderer {
     this.init()
   }
 
-  async init() {
-    await this.initComposer()
-    this.initGUI()
+  init() {
+    this.initComposer()
+    // this.initGUI()
   }
 
-  async initComposer() {
+  initComposer() {
     // effects
-    this.antialiasingEffect = await new AntialiasingEffect()
+    // this.antialiasingEffect = await new AntialiasingEffect()
     this.chromaticAberrationEffect = new ChromaticAberrationEffect()
+    this.barrelEffect = new BarrelEffect()
 
     // composer
     this.composer = new EffectComposer(this.renderer)
 
     // passes
-    this.antialiasingPass = new EffectPass(
-      this.camera,
-      this.antialiasingEffect.smaaEffect
-    )
+    // this.antialiasingPass = new EffectPass(
+    //   this.camera,
+    //   this.antialiasingEffect.smaaEffect
+    // )
 
     this.chromaticAberrationPass = new EffectPass(
       this.camera,
       this.chromaticAberrationEffect
     )
 
+    this.barrelPass = new EffectPass(this.camera, this.barrelEffect)
+
     // addPasses
     this.composer.addPass(new RenderPass(this.scene, this.camera))
-    this.composer.addPass(this.antialiasingPass)
+    // this.composer.addPass(this.antialiasingPass)
+    this.composer.addPass(this.barrelPass)
     this.composer.addPass(this.chromaticAberrationPass)
   }
 

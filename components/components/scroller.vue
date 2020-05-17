@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'scroller--disabled': !enabled }" class="scroller">
+  <div :class="{ 'scroller--native': native }" class="scroller">
     <div
       ref="inner"
       :style="{
@@ -20,11 +20,15 @@ import Dragger from '@/assets/js/dragger'
 export default {
   name: 'Scroller',
   props: {
-    enabled: {
+    scrollable: {
       type: Boolean,
       default: true
     },
     draggable: {
+      type: Boolean,
+      default: false
+    },
+    native: {
       type: Boolean,
       default: false
     }
@@ -39,16 +43,32 @@ export default {
       scrollPosition: (state) => state.scroll.position
     })
   },
-  mounted() {
-    this.initialScroll = { ...this.scrollPosition }
-    if (this.enabled) {
-      this.scroller = new Scroller(this.$refs.inner)
-      this.scroller.events.on('scroll', this.onScroll)
-      if (this.draggable) {
-        this.dragger = new Dragger(this.$el)
-        this.dragger.events.on('drag:move', this.onDrag)
+  watch: {
+    scrollable() {
+      this.scroller.enabled = this.native ? false : this.scrollable
+    },
+    draggable() {
+      this.dragger.enabled = this.native ? false : this.draggable
+    },
+    native() {
+      if (this.native) {
+        this.scroller.enabled = false
+        this.scroller.enabled = false
+      } else {
+        this.scroller.enabled = this.scrollable
+        this.dragger.enabled = this.draggable
       }
     }
+  },
+  mounted() {
+    this.scroller = new Scroller(this.$refs.inner)
+    this.scroller.events.on('scroll', this.onScroll)
+    this.scroller.enabled = this.native ? false : this.scrollable
+
+    this.dragger = new Dragger(this.$el)
+    this.dragger.events.on('drag:move', this.onDrag)
+    this.dragger.enabled = this.native ? false : this.draggable
+
     this.$viewport.events.on('resize', this.onWindowResize)
   },
   beforeDestroy() {
@@ -56,15 +76,16 @@ export default {
       this.scroller.destroy()
       this.scroller.events.off('scroll', this.onScroll)
     }
+
     if (this.dragger) {
       this.dragger.destroy()
       this.dragger.events.off('drag:move', this.onDrag)
     }
+
     this.$viewport.events.off('resize', this.onWindowResize)
   },
   methods: {
     onWindowResize() {
-      this.initialScroll = { ...this.scrollPosition }
       if (this.scroller) {
         this.scroller.resize()
       }
@@ -84,10 +105,11 @@ export default {
 <style lang="scss">
 .scroller {
   height: 100vh;
+  height: calc(100 * var(--vh, 1vh));
   overflow: hidden;
   width: 100vw;
 
-  &--disabled {
+  &--native {
     overflow: auto;
   }
 }

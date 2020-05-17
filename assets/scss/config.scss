@@ -1,5 +1,5 @@
 $colors: (
-  'transparent': rgba(255, 255, 255, 0.001),
+  'transparent': transparent,
   'white': rgba(255, 255, 255, 1)
 );
 
@@ -92,4 +92,4 @@ $responsive-values: (
   )
 );
 
-$font-faces: ('Tobias-Light', 'Tobias-Bold', 'Tobias-Heavy');
+$font-faces: ('GothamUltra');

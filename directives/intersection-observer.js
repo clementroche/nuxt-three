@@ -6,7 +6,7 @@ export default {
 
     const options = {
       root: params.root || null,
-      rootMargin: params.rootMargin || '500px',
+      rootMargin: params.rootMargin || '0px',
       threshold: params.threshold || 0
     }
 

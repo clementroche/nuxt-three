@@ -14,7 +14,11 @@
         rel="noopener noreferrer"
         draggable="false"
       >
-        <webgl-image :src="src" :enabled="$viewport.width > 768" />
+        <webgl-image
+          :src="src"
+          :enabled="$viewport.width > 768"
+          :lazyload="true"
+        />
       </a>
     </div>
   </div>

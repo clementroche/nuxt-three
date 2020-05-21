@@ -3,7 +3,9 @@
     v-intersection-observer="{
       triggerOnce: true,
       onChange: (value) => {
-        inView = value
+        if (lazyload) {
+          inView = value
+        }
       }
     }"
     class="webglImage"

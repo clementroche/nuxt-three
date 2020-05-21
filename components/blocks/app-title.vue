@@ -104,15 +104,14 @@ export default {
 <style lang="scss">
 .appTitle {
   &__title {
-    // color: var(--color-white);
-    color: var(--color-transparent);
+    color: var(--color-white);
     font-family: var(--font-gotham-ultra);
     font-size: 10vw;
     left: 50%;
     letter-spacing: 2vw;
     position: absolute;
     text-align: center;
-    -webkit-text-stroke: 1px var(--color-white);
+    -webkit-text-stroke: 0 var(--color-transparent);
     text-transform: uppercase;
     top: 45vh;
     transform: translateX(-50%) translateY(-50%);
@@ -126,9 +125,11 @@ export default {
       letter-spacing: 20px;
     }
 
-    &:hover {
-      color: var(--color-white);
-      -webkit-text-stroke: 0 var(--color-transparent);
+    @media (hover: hover) {
+      &:hover {
+        color: var(--color-transparent);
+        -webkit-text-stroke: 1px var(--color-white);
+      }
     }
   }
 }

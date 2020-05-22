@@ -55,7 +55,7 @@ class WebGL {
       scene: this.scene
     })
     this.renderer.setSize(viewport.width, viewport.height)
-    this.renderer.setPixelRatio = window.devicePixelRatio || 1
+    this.renderer.setPixelRatio(window.devicePixelRatio || 1)
 
     // composer
     const Composer = require('@/webgl/composer').default

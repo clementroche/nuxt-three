@@ -85,7 +85,7 @@ export default {
     addBox() {
       const { raycaster } = useWebGL()
 
-      const geometry = new THREE.BoxGeometry(1, 1, 1)
+      const geometry = new THREE.DodecahedronBufferGeometry(0.5, 0)
       const material = new THREE.MeshNormalMaterial()
       this.cube = new THREE.Mesh(geometry, material)
       this.cube.scale.setScalar(this.initialScale)

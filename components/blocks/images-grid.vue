@@ -1,8 +1,8 @@
 <template>
   <div class="imagesGrid">
-    <div v-for="(images, i) in columns" :key="i" class="imagesGrid__column">
+    <div v-for="(imgs, i) in columns" :key="i" class="imagesGrid__column">
       <a
-        v-for="({ src, size, url }, index) in images"
+        v-for="({ src, size, url }, index) in imgs"
         :key="index"
         :style="{
           '--aspect-ratio': size[0] / size[1]

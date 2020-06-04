@@ -17,5 +17,8 @@ $ npm run start
 $ npm run generate
 ```
 
+## Contributions
+Pull requests or feedbacks are welcome
+
 ## Demo
 [See the demo](https://nuxt-three.netlify.app/)

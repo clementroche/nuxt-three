@@ -17,7 +17,7 @@ $ npm run start
 $ npm run generate
 ```
 
-## Contributions
+## Contributing
 Pull requests or feedbacks are welcome
 
 ## Demo

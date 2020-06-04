@@ -18,7 +18,7 @@ $ npm run generate
 ```
 
 ## Contributing
-Pull requests or feedbacks are welcome
+Pull requests and feedbacks are welcome
 
 ## Demo
 [See the demo](https://nuxt-three.netlify.app/)

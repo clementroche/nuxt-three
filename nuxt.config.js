@@ -1,6 +1,15 @@
 import webpack from 'webpack'
 
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = (Math.random() * 16) | 0
+    const v = c === 'x' ? r : (r & 0x3) | 0x8
+    return v.toString(16)
+  })
+}
+
 export default {
+  version: uuidv4(),
   mode: 'universal',
   generate: {
     routes: [],
@@ -83,19 +92,59 @@ export default {
   ],
   modules: [
     '@nuxtjs/pwa',
-    [
-      'nuxt-compress',
-      {
-        gzip: {
-          cache: true
-        },
-        brotli: {
-          threshold: 10240
-        }
-      }
-    ],
-    '@nuxtjs/style-resources'
+    '@nuxtjs/style-resources',
+    'nuxt-helmet',
+    'nuxt-ssr-cache',
+    'nuxt-compress'
   ],
+  'nuxt-compress': {
+    gzip: {
+      cache: true
+    },
+    brotli: {
+      threshold: 10240
+    }
+  },
+  cache: {
+    // if you're serving multiple host names (with differing
+    // results) from the same server, set this option to true.
+    // (cache keys will be prefixed by your host name)
+    // if your server is behind a reverse-proxy, please use
+    // express or whatever else that uses 'X-Forwarded-Host'
+    // header field to provide req.hostname (actual host name)
+    useHostPrefix: false,
+    pages: [],
+    store: {
+      type: 'memory',
+
+      // maximum number of pages to store in memory
+      // if limit is reached, least recently used page
+      // is removed.
+      max: 100,
+
+      // number of seconds to store this page in cache
+      ttl: 120
+    }
+  },
+  helmet: {
+    dnsPrefetchControl: true,
+    expectCt: true,
+    frameguard: true,
+    hidePoweredBy: true,
+    hsts: {
+      // Must be at least 1 year to be approved
+      maxAge: 31536000,
+
+      // Must be enabled to be approved
+      includeSubDomains: true,
+      preload: true
+    },
+    ieNoOpen: true,
+    noSniff: true,
+    permittedCrossDomainPolicies: true,
+    referrerPolicy: true,
+    xssFilter: true
+  },
   router: {},
   build: {
     extend(config, ctx) {

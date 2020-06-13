@@ -8,11 +8,9 @@
 import useWebGL from '@/hooks/use-webgl'
 import useGUI from '@/hooks/use-gui'
 
-import WebglInfo from '@/components/webgl/webgl-info'
-
 export default {
   components: {
-    WebglInfo
+    WebglInfo: () => import('@/components/webgl/webgl-info')
   },
   mounted() {
     const { canvas } = useWebGL()

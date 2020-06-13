@@ -16,6 +16,7 @@
       >
         <webgl-image
           :src="src"
+          :alt="url"
           :enabled="$viewport.width > 768"
           :lazyload="true"
         />

@@ -10,13 +10,10 @@
 <script>
 import useWebGL from '@/hooks/use-webgl'
 
-import AppTitle from '@/components/blocks/app-title'
-import ImagesGrid from '@/components/blocks/images-grid'
-
 export default {
   components: {
-    AppTitle,
-    ImagesGrid
+    AppTitle: () => import('@/components/blocks/app-title'),
+    ImagesGrid: () => import('@/components/blocks/images-grid')
   },
 
   mounted() {

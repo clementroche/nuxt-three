@@ -7,13 +7,10 @@
 </template>
 
 <script>
-import WebglScene from '@/components/webgl/webgl-scene'
-import AppScrollbar from '@/components/shell/app-scrollbar'
-
 export default {
   components: {
-    WebglScene,
-    AppScrollbar
+    WebglScene: () => import('@/components/webgl/webgl-scene'),
+    AppScrollbar: () => import('@/components/shell/app-scrollbar')
   }
 }
 </script>

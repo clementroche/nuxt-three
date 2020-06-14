@@ -1,8 +1,8 @@
 <template>
   <div class="appIndex">
-    <scroller :draggable="true" :native="$viewport.width <= 769">
+    <scroller ref="scroller" :draggable="true" :native="$viewport.width <= 769">
       <app-title />
-      <images-grid class="appIndex__imagesGrid" />
+      <images-grid ref="image-grid" class="appIndex__imagesGrid" />
     </scroller>
   </div>
 </template>
@@ -10,10 +10,13 @@
 <script>
 import useWebGL from '@/hooks/use-webgl'
 
+import AppTitle from '@/components/blocks/app-title'
+import ImagesGrid from '@/components/blocks/images-grid'
+
 export default {
   components: {
-    AppTitle: () => import('@/components/blocks/app-title'),
-    ImagesGrid: () => import('@/components/blocks/images-grid')
+    AppTitle,
+    ImagesGrid
   },
 
   mounted() {

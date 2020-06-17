@@ -51,7 +51,7 @@ const mouse = new Vue({
       this.position.set(x, y)
 
       gsap.to(this.lerped, {
-        duration: !this.lastTime ? 0 : 0.6,
+        duration: !this.hasMoved ? 0 : 0.6,
         x,
         y,
         ease: 'power4.out'

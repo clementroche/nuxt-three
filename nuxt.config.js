@@ -122,7 +122,7 @@ export default {
     // express or whatever else that uses 'X-Forwarded-Host'
     // header field to provide req.hostname (actual host name)
     useHostPrefix: false,
-    pages: ['/'],
+    pages: [],
     store: {
       type: 'memory',
 

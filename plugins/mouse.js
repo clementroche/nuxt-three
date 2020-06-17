@@ -10,8 +10,7 @@ const mouse = new Vue({
     return {
       hasMoved: false,
       lerped: new THREE.Vector2(-1000, -1000),
-      position: new THREE.Vector2(-1000, -1000),
-      velocity: new THREE.Vector2(0, 0)
+      position: new THREE.Vector2(-1000, -1000)
     }
   },
   computed: {

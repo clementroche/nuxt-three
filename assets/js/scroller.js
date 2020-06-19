@@ -1,15 +1,17 @@
 import Events from 'events'
 import gsap from 'gsap'
 
-import viewport from '@/plugins/viewport'
+// import viewport from '@/plugins/viewport'
 
 import useVirtualScroll from '@/hooks/use-virtual-scroll'
 import useRAF from '@/hooks/use-raf'
+import uuidv4 from '@/assets/js/uuidv4'
 
 export default class Scroller {
   constructor(container) {
     this.container = container
 
+    this.uuid = uuidv4()
     this.events = new Events()
 
     this.reset()
@@ -21,8 +23,8 @@ export default class Scroller {
     virtualScroll.on(this.scrollHandler)
 
     const RAF = useRAF()
-    RAF.add('pre-scroller', this.preLoop.bind(this), -11)
-    RAF.add('scroller', this.loop.bind(this), 1)
+    RAF.add('pre-scroller' + this.uuid, this.preLoop.bind(this), -11)
+    RAF.add('scroller' + this.uuid, this.loop.bind(this), 1)
   }
 
   reset() {
@@ -32,9 +34,11 @@ export default class Scroller {
 
   resize() {
     this.boundingRect = this.container.getBoundingClientRect()
+
     this.maxScroll = {
-      x: (this.boundingRect.width - viewport.width) * -1,
-      y: (this.boundingRect.height - viewport.height) * -1
+      x: (this.boundingRect.width - this.container.parentNode.offsetWidth) * -1,
+      y:
+        (this.boundingRect.height - this.container.parentNode.offsetHeight) * -1
     }
   }
 
@@ -42,9 +46,9 @@ export default class Scroller {
     const virtualScroll = useVirtualScroll()
     virtualScroll.off(this.scrollHandler)
 
-    const RAF = useRaf()
-    RAF.remove('pre-scroller')
-    RAF.remove('scroller')
+    const RAF = useRAF()
+    RAF.remove('pre-scroller' + this.uuid)
+    RAF.remove('scroller' + this.uuid)
   }
 
   scrollTo({ x, y }, duration) {
@@ -67,13 +71,6 @@ export default class Scroller {
     this.scrollPosition.y += deltaY
     this.scrollPosition.y = Math.max(this.maxScroll.y, this.scrollPosition.y)
     this.scrollPosition.y = Math.min(0, this.scrollPosition.y)
-
-    // gsap.to(this.currentScrollPosition, {
-    //   duration: 1,
-    //   ease: 'power4.out',
-    //   x,
-    //   y
-    // })
 
     this.scrollTo(this.scrollPosition, 1)
   }

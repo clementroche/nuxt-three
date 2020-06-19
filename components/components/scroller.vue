@@ -53,7 +53,7 @@ export default {
     native() {
       if (this.native) {
         this.scroller.enabled = false
-        this.scroller.enabled = false
+        this.dragger.enabled = false
       } else {
         this.scroller.enabled = this.scrollable
         this.dragger.enabled = this.draggable
@@ -104,10 +104,8 @@ export default {
 
 <style lang="scss">
 .scroller {
-  height: 100vh;
-  height: calc(100 * var(--vh, 1vh));
+  height: 100%;
   overflow: hidden;
-  width: 100vw;
 
   &--native {
     overflow: auto;

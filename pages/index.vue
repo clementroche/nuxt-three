@@ -31,6 +31,7 @@ export default {
 <style lang="scss">
 .appIndex {
   cursor: grab;
+  height: 100vh;
 
   &__imagesGrid {
     padding-top: 90vh;

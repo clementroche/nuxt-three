@@ -10,7 +10,7 @@
     }"
     class="webglImage"
   >
-    <img :src="inView && !enabled ? src : ''" />
+    <img v-if="!enabled" :src="inView ? src : ''" />
   </div>
 </template>
 

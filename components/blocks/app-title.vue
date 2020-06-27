@@ -1,6 +1,6 @@
 <template>
   <div class="appTitle">
-    <h1 class="appTitle__title">nuxt-three</h1>
+    <h1 v-kinesis="{ depth: 20 }" class="appTitle__title">nuxt-three</h1>
   </div>
 </template>
 

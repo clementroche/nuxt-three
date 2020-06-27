@@ -17,7 +17,7 @@
         <webgl-lazyload-image
           :src="src"
           :alt="url"
-          :enabled="$viewport.width > 768"
+          :enabled="webglEnabled"
           :lazyload="true"
         />
       </a>
@@ -29,6 +29,7 @@
 export default {
   data() {
     return {
+      webglEnabled: true,
       images: [
         {
           src:
@@ -100,6 +101,19 @@ export default {
         [...this.images].splice(3, 3),
         [...this.images].splice(6, 3)
       ]
+    }
+  },
+  mounted() {
+    this.webglEnabled = this.$viewport.width > 768
+
+    this.$viewport.events.on('resize', this.onWindowResize)
+  },
+  beforeDestroy() {
+    this.$viewport.events.off('resize', this.onWindowResize)
+  },
+  methods: {
+    onWindowResize() {
+      this.webglEnabled = this.$viewport.width > 768
     }
   }
 }

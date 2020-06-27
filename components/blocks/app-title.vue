@@ -104,18 +104,20 @@ export default {
 
 <style lang="scss">
 .appTitle {
+  align-items: center;
+  display: flex;
+  height: 90vh;
+  height: calc(var(--vh, 1vh) * 90);
+  justify-content: center;
+
   &__title {
     color: var(--color-white);
     font-family: var(--font-gotham-ultra);
     font-size: 10vw;
-    left: 50%;
     letter-spacing: 2vw;
-    position: absolute;
     text-align: center;
     -webkit-text-stroke: 0 var(--color-transparent);
     text-transform: uppercase;
-    top: 45vh;
-    transform: translateX(-50%) translateY(-50%);
     transition-duration: 1s;
     transition-property: color, -webkit-text-stroke;
     transition-timing-function: _ease('quint', 'out');

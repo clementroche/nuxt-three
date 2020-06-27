@@ -19,10 +19,6 @@ import Dragger from '@/assets/js/dragger'
 export default {
   name: 'Scroller',
   props: {
-    scrollPosition: {
-      type: Object,
-      default: () => ({ x: 0, y: 0 })
-    },
     scrollable: {
       type: Boolean,
       default: true
@@ -38,14 +34,9 @@ export default {
   },
   data() {
     return {
-      initialScroll: 0
+      scrollPosition: new THREE.Vector2(0, 0)
     }
   },
-  // computed: {
-  //   ...mapState({
-  //     scrollPosition: (state) => state.scroll.position
-  //   })
-  // },
   watch: {
     scrollable() {
       this.scroller.enabled = this.native ? false : this.scrollable
@@ -94,11 +85,8 @@ export default {
       }
     },
     onScroll({ position, progress, velocity }) {
-      // this.$store.commit('scroll/setPosition', position)
-      // this.$store.commit('scroll/setProgress', progress)
-      // this.$store.commit('scroll/setVelocity', velocity)
-
       this.$emit('scroll', { position, progress, velocity })
+      this.scrollPosition.copy(position)
     },
     onDrag({ deltaX, deltaY }) {
       this.scroller.onScroll({ deltaX: -deltaX, deltaY: -deltaY })
@@ -111,6 +99,10 @@ export default {
 .scroller {
   height: 100%;
   overflow: hidden;
+
+  &__inner {
+    will-change: transform;
+  }
 
   &--native {
     height: auto;

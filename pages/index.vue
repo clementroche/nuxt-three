@@ -5,7 +5,6 @@
       @scroll="onScroll"
       :draggable="true"
       :native="$viewport.width <= 769"
-      :scrollPosition="$store.state.scroll.position"
     >
       <app-title />
       <images-grid ref="image-grid" class="appIndex__imagesGrid" />

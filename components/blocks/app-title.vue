@@ -1,6 +1,5 @@
 <template>
   <div class="appTitle">
-    <!-- <webgl-text :text="'nuxt-three'" :fontSize="'14vw'" :tag="'h1'" /> -->
     <h1 class="appTitle__title">nuxt-three</h1>
   </div>
 </template>
@@ -75,7 +74,9 @@ export default {
       this.cube.rotation.set(-this.mouse.y * 0.2, this.mouse.x * 0.2, 0)
 
       this.cube.position.y =
-        -this.scrollPosition.y + this.$viewport.height * 0.05
+        -this.scrollPosition.y +
+        this.$scroll.scrollY +
+        this.$viewport.height * 0.05
     },
     onRaycast(intersections) {
       this.hover = intersections.some(

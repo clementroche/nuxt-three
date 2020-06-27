@@ -86,6 +86,7 @@ export default {
   plugins: [
     { src: '~/plugins/events.js', mode: 'client' },
     { src: '~/plugins/viewport.js', mode: 'client' },
+    { src: '~/plugins/scroll.js', mode: 'client' },
     { src: '~/plugins/mouse.js', mode: 'client' },
     { src: '~/plugins/directives.js', mode: 'client' },
     { src: '~/plugins/components.js' }

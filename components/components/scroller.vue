@@ -13,13 +13,16 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import Scroller from '@/assets/js/scroller'
 import Dragger from '@/assets/js/dragger'
 
 export default {
   name: 'Scroller',
   props: {
+    scrollPosition: {
+      type: Object,
+      default: () => ({ x: 0, y: 0 })
+    },
     scrollable: {
       type: Boolean,
       default: true
@@ -38,11 +41,11 @@ export default {
       initialScroll: 0
     }
   },
-  computed: {
-    ...mapState({
-      scrollPosition: (state) => state.scroll.position
-    })
-  },
+  // computed: {
+  //   ...mapState({
+  //     scrollPosition: (state) => state.scroll.position
+  //   })
+  // },
   watch: {
     scrollable() {
       this.scroller.enabled = this.native ? false : this.scrollable
@@ -91,9 +94,11 @@ export default {
       }
     },
     onScroll({ position, progress, velocity }) {
-      this.$store.commit('scroll/setPosition', position)
-      this.$store.commit('scroll/setProgress', progress)
-      this.$store.commit('scroll/setVelocity', velocity)
+      // this.$store.commit('scroll/setPosition', position)
+      // this.$store.commit('scroll/setProgress', progress)
+      // this.$store.commit('scroll/setVelocity', velocity)
+
+      this.$emit('scroll', { position, progress, velocity })
     },
     onDrag({ deltaX, deltaY }) {
       this.scroller.onScroll({ deltaX: -deltaX, deltaY: -deltaY })
@@ -108,6 +113,7 @@ export default {
   overflow: hidden;
 
   &--native {
+    height: auto;
     overflow: auto;
   }
 }

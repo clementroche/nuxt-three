@@ -127,7 +127,7 @@ export default {
         this.texture.image.naturalWidth / this.texture.image.naturalHeight
 
       requestAnimationFrame(() => {
-        this.$emit('loaded')
+        this.$emit('load')
       }, 0)
     },
     computeRatio() {
@@ -157,9 +157,6 @@ export default {
         uniforms: {
           uMap: {
             value: this.texture || null
-          },
-          uOpacity: {
-            value: 1
           },
           uRatio: {
             value: new THREE.Vector2()
@@ -194,7 +191,8 @@ export default {
           this.$viewport.height / 2 -
           elementY -
           elementCenterY -
-          this.scrollPosition.y
+          this.scrollPosition.y +
+          this.$scroll.scrollY
       }
     },
     update() {

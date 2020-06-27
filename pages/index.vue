@@ -1,6 +1,12 @@
 <template>
   <div class="appIndex">
-    <scroller ref="scroller" :draggable="true" :native="$viewport.width <= 769">
+    <scroller
+      ref="scroller"
+      @scroll="onScroll"
+      :draggable="true"
+      :native="$viewport.width <= 769"
+      :scrollPosition="$store.state.scroll.position"
+    >
       <app-title />
       <images-grid ref="image-grid" class="appIndex__imagesGrid" />
     </scroller>
@@ -24,14 +30,24 @@ export default {
     const { barrelEffect } = composer
 
     barrelEffect.uniforms.get('intensity').value = -0.1
+  },
+
+  methods: {
+    onScroll({ position, progress, velocity }) {
+      this.$store.commit('scroll/setPosition', position)
+      this.$store.commit('scroll/setProgress', progress)
+      this.$store.commit('scroll/setVelocity', velocity)
+    }
   }
 }
 </script>
 
 <style lang="scss">
 .appIndex {
-  cursor: grab;
-  height: 100vh;
+  @include media('>m') {
+    cursor: grab;
+    height: 100vh;
+  }
 
   &__imagesGrid {
     padding-top: 90vh;

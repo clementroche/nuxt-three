@@ -15,7 +15,7 @@ const viewport = new Vue({
   created() {
     if (!process.client) return
     this.events = new Events()
-    this.events.setMaxListeners(50)
+    this.events.setMaxListeners(Infinity)
     this.onWindowResize()
     window.addEventListener('resize', this.onWindowResize, false)
   },

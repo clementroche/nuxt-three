@@ -14,7 +14,7 @@
         rel="noopener noreferrer"
         draggable="false"
       >
-        <webgl-image
+        <webgl-lazyload-image
           :src="src"
           :alt="url"
           :enabled="$viewport.width > 768"

@@ -1,6 +1,6 @@
 <template>
   <div class="appTitle">
-    <h1 v-kinesis="{ depth: 20 }" class="appTitle__title">nuxt-three</h1>
+    <h1 v-kinesis="{ depth: 50 }" class="appTitle__title">nuxt-three</h1>
   </div>
 </template>
 
@@ -10,33 +10,28 @@ import gsap from 'gsap'
 import useWebGL from '@/hooks/use-webgl'
 import useRAF from '@/hooks/use-raf'
 
+const SCALE_OUT = 0.2
+const SCALE_IN = 0.3
+
 export default {
   data() {
     return {
       mouse: new THREE.Vector2(),
-      hover: false
+      hover: false,
+      scale: undefined
     }
   },
   computed: {
     ...mapState({
-      scrollPosition: (state) => state.scroll.position,
-      initialScale() {
-        return this.$viewport.width * 0.18
-      },
-      hoveredScale() {
-        return this.$viewport.width * 0.22
-      }
+      scrollPosition: (state) => state.scroll.position
     })
   },
   watch: {
     hover() {
-      const scale = this.hover ? this.hoveredScale : this.initialScale
-
-      gsap.to(this.cube.scale, {
+      gsap.to(this, {
         duration: 2,
         ease: 'expo.out',
-        x: scale,
-        y: scale
+        scale: this.hover ? SCALE_IN : SCALE_OUT
       })
     },
     '$mouse.normalized': {
@@ -44,7 +39,7 @@ export default {
         const { x, y } = this.$mouse.normalized
         gsap.to(this.mouse, {
           ease: 'expo.out',
-          duration: 2,
+          duration: 1,
           x,
           y
         })
@@ -53,16 +48,18 @@ export default {
     }
   },
   mounted() {
+    this.scale = SCALE_OUT
+
     this.addBox()
 
     const RAF = useRAF()
-    RAF.add('index', this.loop, 0)
+    RAF.add('title', this.loop, 0)
   },
   beforeDestroy() {
     const RAF = useRAF()
-    RAF.remove('index')
+    RAF.remove('title')
 
-    const { DOMScene } = useWebGL()
+    const { DOMScene, raycaster } = useWebGL()
     DOMScene.remove(this.cube)
 
     raycaster.removeTarget(this.cube)
@@ -71,6 +68,8 @@ export default {
   },
   methods: {
     loop() {
+      this.cube.scale.setScalar(this.$viewport.width * this.scale)
+
       this.cube.rotation.set(-this.mouse.y * 0.2, this.mouse.x * 0.2, 0)
 
       this.cube.position.y =
@@ -111,16 +110,16 @@ export default {
   justify-content: center;
 
   &__title {
-    color: var(--color-white);
+    color: var(--c-white);
     font-family: var(--font-gotham-ultra);
     font-size: 10vw;
     letter-spacing: 2vw;
     text-align: center;
-    -webkit-text-stroke: 0 var(--color-transparent);
+    -webkit-text-stroke: 1px transparent;
     text-transform: uppercase;
     transition-duration: 1s;
     transition-property: color, -webkit-text-stroke;
-    transition-timing-function: _ease('quint', 'out');
+    transition-timing-function: var(--ease-out-quint);
     white-space: nowrap;
 
     @include media('>l') {
@@ -130,8 +129,8 @@ export default {
 
     @media (hover: hover) {
       &:hover {
-        color: var(--color-transparent);
-        -webkit-text-stroke: 1px var(--color-white);
+        color: transparent;
+        -webkit-text-stroke: 1px var(--c-white);
       }
     }
   }

@@ -1,0 +1,35 @@
+@import 'vendors';
+@import 'utils';
+@include fonts();
+
+:root {
+  --font-gotham-ultra: 'GothamUltra', sans-serif;
+  @include colors();
+}
+
+html {
+  height: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body,
+#__nuxt,
+#__layout,
+#__content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+}
+
+body {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100%;
+  -webkit-overflow-scrolling: touch;
+}

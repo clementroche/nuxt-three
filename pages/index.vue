@@ -1,7 +1,6 @@
 <template>
   <div class="appIndex">
     <scroller
-      ref="scroller"
       @scroll="onScroll"
       :draggable="true"
       :native="$viewport.width <= 769"
@@ -13,7 +12,7 @@
 </template>
 
 <script>
-import useWebGL from '@/hooks/use-webgl'
+// import useWebGL from '@/hooks/use-webgl'
 
 import AppTitle from '@/components/blocks/app-title'
 import ImagesGrid from '@/components/blocks/images-grid'
@@ -25,10 +24,9 @@ export default {
   },
 
   mounted() {
-    const { composer } = useWebGL()
-    const { barrelEffect } = composer
-
-    barrelEffect.uniforms.get('intensity').value = -0.1
+    // const { composer } = useWebGL()
+    // const { barrelEffect } = composer
+    // barrelEffect.uniforms.get('intensity').value = -0.1
   },
 
   methods: {
@@ -36,6 +34,8 @@ export default {
       this.$store.commit('scroll/setPosition', position)
       this.$store.commit('scroll/setProgress', progress)
       this.$store.commit('scroll/setVelocity', velocity)
+
+      console.log(this.$store.state.scroll.progress.y)
     }
   }
 }

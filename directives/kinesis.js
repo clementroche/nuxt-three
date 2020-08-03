@@ -12,7 +12,7 @@ export default {
     function onMouseMove() {
       gsap.to(el, {
         duration: 1,
-        ease: 'power4.out',
+        ease: 'expo.out',
         x: options.depth * mouse.normalized.x,
         y: options.depth * -mouse.normalized.y
       })

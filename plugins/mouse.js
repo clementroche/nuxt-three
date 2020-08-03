@@ -1,5 +1,5 @@
 import Events from 'events'
-import gsap from 'gsap'
+// import gsap from 'gsap'
 import Vue from 'vue'
 import viewport from '@/plugins/viewport'
 
@@ -9,7 +9,6 @@ const mouse = new Vue({
   data() {
     return {
       hasMoved: false,
-      lerped: new THREE.Vector2(-1000, -1000),
       position: new THREE.Vector2(-1000, -1000)
     }
   },
@@ -18,12 +17,6 @@ const mouse = new Vue({
       return new THREE.Vector2(
         (this.position.x / viewport.width) * 2 - 1,
         -(this.position.y / viewport.height) * 2 + 1
-      )
-    },
-    lerpedNormalized() {
-      return new THREE.Vector2(
-        (this.lerped.x / viewport.width) * 2 - 1,
-        -(this.lerped.y / viewport.height) * 2 + 1
       )
     }
   },
@@ -44,21 +37,22 @@ const mouse = new Vue({
     window.removeEventListener('mousemove', this.onMouseMove, false)
   },
   methods: {
-    onMouseMove(event) {
-      const e = event.targetTouches ? event.targetTouches[0] : event
+    onMouseMove(e) {
+      if (e.changedTouches && e.changedTouches.length) {
+        e.x = e.changedTouches[0].pageX
+        e.y = e.changedTouches[0].pageY
+      }
+      if (e.x === undefined) {
+        e.x = e.pageX
+        e.y = e.pageY
+      }
       const { x, y } = e
 
       this.position.set(x, y)
 
-      gsap.to(this.lerped, {
-        duration: !this.hasMoved ? 0 : 0.6,
-        x,
-        y,
-        ease: 'power4.out'
-      })
-
       this.events.emit('mousemove', {
         ...this.$data,
+        normalized: this.normalized,
         originalEvent: e
       })
 

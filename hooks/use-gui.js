@@ -6,6 +6,14 @@ const useGUI = () => {
     const init = require('three-dat.gui')
     init(dat)
 
+    dat.GUI.prototype._addFolder = function(name) {
+      if (this.__folders[name]) {
+        return this.__folders[name]
+      } else {
+        return this.addFolder(name)
+      }
+    }
+
     gui = new dat.GUI()
     // camera
     gui.camera = gui.addFolder('Camera')

@@ -23,7 +23,7 @@ export default {
   width: 8px;
 
   &__bar {
-    background-color: var(--color-white);
+    background-color: var(--c-white);
     width: 100%;
   }
 }

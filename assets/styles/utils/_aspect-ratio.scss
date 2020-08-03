@@ -16,6 +16,7 @@
 
 [style*='--aspect-ratio']::before {
   --aspect-ratio-divider: calc(var(--aspect-ratio));
+
   content: '';
   display: block;
   padding-bottom: calc(100% / var(--aspect-ratio-divider));

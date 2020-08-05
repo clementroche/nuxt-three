@@ -27,7 +27,7 @@
     "gsap": "^3.2.5",
     "include-media": "^1.4.9",
     "intersection-observer-polyfill": "^0.1.0",
-    "nuxt": "^2.12.0",
+    "nuxt": "^2.14.1",
     "nuxt-compress": "^1.1.0",
     "nuxt-helmet": "^1.2.3",
     "nuxt-ssr-cache": "^1.5.1",

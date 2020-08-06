@@ -5,7 +5,11 @@
 :root {
   --font-gotham-ultra: 'GothamUltra', sans-serif;
 
-  @include colors();
+  // to fix
+  // @include colors();
+
+  --c-black: rgba(0, 0, 0, 1);
+  --c-white: rgba(255, 255, 255, 1);
 }
 
 html {

@@ -20,10 +20,10 @@ export default {
 
 <style lang="scss">
 .appScrollbar {
-  width: 8px;
+  width: 4px;
 
   &__bar {
-    background-color: var(--c-white);
+    background-color: var(--c-secondary);
     width: 100%;
   }
 }

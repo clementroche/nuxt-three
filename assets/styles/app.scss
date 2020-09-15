@@ -10,10 +10,17 @@
 
   --c-black: rgba(0, 0, 0, 1);
   --c-white: rgba(255, 255, 255, 1);
+
+  --c-primary: var(--c-black);
+  --c-secondary: var(--c-white);
 }
 
 html {
   height: 100%;
+  width: 100%;
+  @include media('>m') {
+    overflow: hidden;
+  }
 }
 
 *,

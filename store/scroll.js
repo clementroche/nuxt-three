@@ -1,5 +1,3 @@
-export const strict = false
-
 export const state = () => ({
   position: { x: 0, y: 0 },
   progress: { x: 0, y: 0 },

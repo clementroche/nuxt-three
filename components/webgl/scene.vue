@@ -1,6 +1,6 @@
 <template>
   <div id="appScene">
-    <webgl-info />
+    <!-- <webgl-info /> -->
   </div>
 </template>
 
@@ -9,9 +9,6 @@ import useWebGL from '@/hooks/use-webgl'
 import useGUI from '@/hooks/use-gui'
 
 export default {
-  components: {
-    WebglInfo: () => import('@/components/webgl/webgl-info')
-  },
   mounted() {
     const { canvas } = useWebGL()
     this.$el.appendChild(canvas)
@@ -30,6 +27,7 @@ export default {
 #appScene {
   height: 100% !important;
   left: 0;
+  pointer-events: none;
   // pointer-events: none;
   position: fixed;
   top: 0;

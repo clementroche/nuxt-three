@@ -1,12 +1,9 @@
 <template>
-  <div class="imagesGrid">
+  <section class="imagesGrid">
     <div v-for="(imgs, i) in columns" :key="i" class="imagesGrid__column">
       <a
         v-for="({ src, size, url }, index) in imgs"
         :key="index"
-        :style="{
-          '--aspect-ratio': size[0] / size[1]
-        }"
         :href="url"
         @dragstart.prevent=""
         class="imagesGrid__image"
@@ -14,15 +11,15 @@
         rel="noopener noreferrer"
         draggable="false"
       >
-        <webgl-lazyload-image
-          :src="src"
-          :alt="url"
-          :enabled="webglEnabled"
-          :lazyload="true"
+        <webgl-image
+          :small="src"
+          :large="src"
+          :native="$mq !== 'desktop'"
+          :aspectRatio="size[0] / size[1]"
         />
       </a>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>

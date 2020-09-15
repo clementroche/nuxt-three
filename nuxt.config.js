@@ -83,6 +83,37 @@ export default {
     theme_color: '#000000',
     description: ''
   },
+  components: [
+    {
+      path: '@/components',
+      extensions: ['vue']
+    },
+    {
+      path: '@/components/app',
+      prefix: 'app',
+      extensions: ['vue']
+    },
+    {
+      path: '@/components/elements',
+      prefix: 'e',
+      extensions: ['vue']
+    },
+    {
+      path: '@/components/blocks',
+      prefix: 'block',
+      extensions: ['vue']
+    },
+    {
+      path: '@/components/webgl',
+      prefix: 'webgl',
+      extensions: ['vue']
+    },
+    {
+      path: '@/components/svg',
+      prefix: 'svg',
+      extensions: ['vue']
+    }
+  ],
   loading: false,
   css: ['@/assets/styles/app.scss'],
   plugins: [
@@ -90,8 +121,7 @@ export default {
     { src: '~/plugins/viewport.js', mode: 'client' },
     { src: '~/plugins/scroll.js', mode: 'client' },
     { src: '~/plugins/mouse.js', mode: 'client' },
-    { src: '~/plugins/directives.js', mode: 'client' },
-    { src: '~/plugins/components.js' }
+    { src: '~/plugins/directives.js', mode: 'client' }
   ],
   build: {
     extend(config, ctx) {

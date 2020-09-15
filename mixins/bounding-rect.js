@@ -16,11 +16,11 @@ export default {
     this.updateBoundingRect()
 
     this.$viewport.events.on('resize', this.updateBoundingRect)
-    this.$events.on('RESIZE', this.updateBoundingRect)
+    this.$events.on('viewport:resize', this.updateBoundingRect)
   },
   beforeDestroy() {
     this.$viewport.events.off('resize', this.updateBoundingRect)
-    this.$events.off('RESIZE', this.updateBoundingRect)
+    this.$events.off('viewport:resize', this.updateBoundingRect)
   },
   methods: {
     updateBoundingRect() {

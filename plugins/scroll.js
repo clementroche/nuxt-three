@@ -15,7 +15,6 @@ const scroll = new Vue({
     this.events = new Events()
     this.events.setMaxListeners(Infinity)
 
-    // this.scrollElement = document.querySelector('#__nuxt')
     this.onScroll()
     window.addEventListener('scroll', this.onScroll, false)
   },
@@ -26,6 +25,14 @@ const scroll = new Vue({
   methods: {
     onScroll() {
       this.scrollY = window.scrollY
+
+      if (this.$nuxt) {
+        console.log('scroll', this.scrollY)
+        this.$nuxt.$store.commit('scroll/setPosition', {
+          x: this.scrollX,
+          y: -this.scrollY
+        })
+      }
     }
   }
 })

@@ -1,10 +1,18 @@
 export default {
   modules: [
     '@nuxtjs/style-resources',
+    'nuxt-mq',
     'nuxt-helmet',
     'nuxt-ssr-cache',
     'nuxt-compress'
   ],
+  mq: {
+    defaultBreakpoint: 'default',
+    breakpoints: {
+      mobile: 769,
+      desktop: Infinity
+    }
+  },
   /*
    ** Helmet module configuration
    ** See https://helmetjs.github.io/docs/

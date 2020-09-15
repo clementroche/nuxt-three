@@ -15,7 +15,7 @@
     content: '';
     height: 300%;
     left: -50%;
-    opacity: 0.06;
+    opacity: 0.1;
     position: fixed;
     top: -110%;
     width: 300%;

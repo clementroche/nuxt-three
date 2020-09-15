@@ -80,6 +80,7 @@ export default class Scroller {
   }
 
   loop() {
+    if (!this.enabled) return
     this.events.emit('scroll', {
       velocity: this.velocity,
       position: this.currentScrollPosition,

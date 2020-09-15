@@ -1,21 +1,15 @@
 <template>
   <div>
     <app-noise id="appNoise" />
-    <app-scrollbar id="appScrollbar" />
-    <nuxt />
-    <webgl-scene />
+    <app-scrollbar id="appScrollbar" v-if="$mq === 'desktop'" />
+    <app-scroller>
+      <nuxt />
+    </app-scroller>
+    <webgl-scene
+      :style="`z-index:${$store.state.ui.glIndex === 'below' ? -1 : 0}`"
+    />
   </div>
 </template>
-
-<script>
-export default {
-  components: {
-    WebglScene: () => import('@/components/webgl/webgl-scene'),
-    AppScrollbar: () => import('@/components/shell/app-scrollbar'),
-    AppNoise: () => import('@/components/shell/app-noise')
-  }
-}
-</script>
 
 <style lang="scss">
 #__nuxt {
@@ -24,12 +18,12 @@ export default {
 }
 
 #appNoise {
-  height: calc(var(--vh, 1vh) * 100);
+  height: 100%;
   left: 0;
   pointer-events: none;
   position: fixed;
   top: 0;
-  width: 100vw;
+  width: 100%;
   z-index: 10;
 }
 
@@ -38,5 +32,6 @@ export default {
   position: absolute;
   right: 0;
   top: 0;
+  z-index: 6;
 }
 </style>

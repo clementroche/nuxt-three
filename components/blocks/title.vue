@@ -68,14 +68,16 @@ export default {
   },
   methods: {
     loop() {
-      this.cube.scale.setScalar(this.$viewport.width * this.scale)
+      this.cube.scale.setScalar(
+        (this.$viewport.width <= 769
+          ? this.$viewport.width * 2
+          : this.$viewport.width) * this.scale
+      )
 
       this.cube.rotation.set(-this.mouse.y * 0.2, this.mouse.x * 0.2, 0)
 
       this.cube.position.y =
         -this.scrollPosition.y + this.$viewport.height * 0.05
-
-      console.log(this.scrollPosition.y)
     },
     onRaycast(intersections) {
       this.hover = intersections.some(

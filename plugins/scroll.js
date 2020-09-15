@@ -27,7 +27,6 @@ const scroll = new Vue({
       this.scrollY = window.scrollY
 
       if (this.$nuxt) {
-        console.log('scroll', this.scrollY)
         this.$nuxt.$store.commit('scroll/setPosition', {
           x: this.scrollX,
           y: -this.scrollY

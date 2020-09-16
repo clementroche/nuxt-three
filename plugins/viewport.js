@@ -7,7 +7,7 @@ const viewport = new Vue({
   data() {
     if (!process.client) return {}
     return {
-      width: window.innerWidth,
+      width: document.documentElement.clientWidth || document.body.clientWidth,
       height: window.innerHeight,
       ratio: window.innerWidth / window.innerHeight
     }
@@ -25,7 +25,8 @@ const viewport = new Vue({
   },
   methods: {
     onWindowResize() {
-      this.width = window.innerWidth
+      this.width =
+        document.documentElement.clientWidth || document.body.clientWidth
       this.height = window.innerHeight
       this.ratio = this.width / this.height
 

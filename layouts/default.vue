@@ -11,6 +11,18 @@
   </div>
 </template>
 
+<script>
+export default {
+  scrollToTop: true,
+  mounted() {
+    window.scrollTo(0, 0)
+    setTimeout(() => {
+      this.$events.emit('viewport:resize')
+    }, 0)
+  }
+}
+</script>
+
 <style lang="scss">
 #__nuxt {
   height: 100%;

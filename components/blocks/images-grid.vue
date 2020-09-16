@@ -14,7 +14,7 @@
         <webgl-image
           :small="src"
           :large="src"
-          :native="$mq !== 'desktop'"
+          :native="false"
           :aspectRatio="size[0] / size[1]"
         />
       </a>

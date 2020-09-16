@@ -7,6 +7,7 @@ const scroll = new Vue({
   data() {
     if (!process.client) return {}
     return {
+      scrollX: window.scrollX,
       scrollY: window.scrollY
     }
   },
@@ -15,15 +16,20 @@ const scroll = new Vue({
     this.events = new Events()
     this.events.setMaxListeners(Infinity)
 
-    this.onScroll()
+    process.nextTick(() => {
+      this.onScroll()
+    })
+
     window.addEventListener('scroll', this.onScroll, false)
   },
+
   beforeDestroy() {
     if (!process.client) return
     window.removeEventListener('scroll', this.onScroll, false)
   },
   methods: {
     onScroll() {
+      this.scrollX = window.scrollX
       this.scrollY = window.scrollY
 
       if (this.$nuxt) {

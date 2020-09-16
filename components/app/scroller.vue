@@ -2,9 +2,7 @@
   <e-scroller
     ref="scroller"
     @scroll="onScroll"
-    :disabled="$mq === 'mobile'"
-    :draggable="$mq === 'desktop'"
-    :scrollable="$mq === 'desktop'"
+    :disabled="native"
     class="appScroller"
   >
     <slot />
@@ -14,11 +12,17 @@
 <script>
 export default {
   computed: {
+    native() {
+      return this.$mq === 'mobile'
+    },
     pageLoaded() {
       return this.$store.getters['loading/loaded']
     }
   },
   watch: {
+    native() {
+      this.$store.commit('scroll/reset')
+    },
     pageLoaded() {
       if (this.pageLoaded) {
         setTimeout(() => {
@@ -33,12 +37,26 @@ export default {
     this.$events.on('router:change', this.$refs.scroller.reset)
     this.$events.on('router:mounted', this.$refs.scroller.onWindowResize)
     this.$events.on('swiper:init', this.$refs.scroller.onWindowResize)
+
+    this.onScroll({
+      position: { x: window.scrollX, y: -window.scrollY }
+    })
+
+    window.addEventListener(
+      'scroll',
+      () => {
+        this.onScroll({
+          position: { x: window.scrollX, y: -window.scrollY }
+        })
+      },
+      false
+    )
   },
   methods: {
     onScroll({ position, progress, velocity }) {
-      this.$store.commit('scroll/setPosition', position)
-      this.$store.commit('scroll/setProgress', progress)
-      this.$store.commit('scroll/setVelocity', velocity)
+      if (position) this.$store.commit('scroll/setPosition', position)
+      if (progress) this.$store.commit('scroll/setProgress', progress)
+      if (velocity) this.$store.commit('scroll/setVelocity', velocity)
     }
   }
 }

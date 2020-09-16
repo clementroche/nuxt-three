@@ -1,11 +1,13 @@
-export default class Raf {
-  constructor(clock = new THREE.Clock()) {
-    this.rafs = {}
-    this.isRunning = false
-    this.clock = clock
-    this.paused = false
+import Clock from './clock'
 
-    this.fps = 60
+// TODO : add pause/resume
+
+export default class Raf {
+  constructor(clock = new Clock(), fps = 60) {
+    this.rafs = {}
+    this.clock = clock
+
+    this.fps = fps
     this.latest = 0
     this.delta = 0
     this.optimumDeltaTime = this.frameDuration / 1000

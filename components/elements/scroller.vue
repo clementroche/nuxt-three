@@ -116,6 +116,7 @@ export default {
 
   // &--disabled {
   //   height: auto;
+  //   overflow: auto;
   // }
 }
 </style>

@@ -52,7 +52,11 @@ class WebGL {
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
       context,
-      scene: this.scene
+      scene: this.scene,
+      powerPreference: 'high-performance',
+      stencil: false,
+      depth: false,
+      antialias: false
     })
     this.renderer.setSize(viewport.width, viewport.height)
     this.renderer.setPixelRatio(window.devicePixelRatio || 1)
@@ -83,6 +87,7 @@ class WebGL {
   }
 
   loop(clock) {
+    this.renderer.setSize(viewport.width, viewport.height)
     this.composer.render(clock)
     this.renderer.renderLists.dispose()
   }

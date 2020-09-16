@@ -98,6 +98,8 @@ export default class Composer {
     }
 
     this.renderer.setRenderTarget(null)
+    this.renderer.clear()
+
     if (this.composer && this.enabled) {
       this.composer.setSize(viewport.width, viewport.height)
       this.composer.render(clock.deltaTime)

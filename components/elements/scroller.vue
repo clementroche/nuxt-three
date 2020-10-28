@@ -5,9 +5,9 @@
       :style="
         scrollable || draggable
           ? {
-              transform: `translateX(${scrollPosition.x}px) translateY(${
-                scrollPosition.y
-              }px)  ${scrollVelocity.y ? 'translateZ(0px)' : ''}`
+              transform: `translate3d(${
+                scrollPosition.x
+              }px, ${-scrollPosition.y}px, 0px)`
             }
           : {}
       "
@@ -21,6 +21,7 @@
 <script>
 import Scroller from '@/assets/js/scroller'
 import Dragger from '@/assets/js/dragger'
+import useVirtualScroll from '@/hooks/use-virtual-scroll'
 
 export default {
   name: 'Scroller',
@@ -40,35 +41,24 @@ export default {
   },
   data() {
     return {
-      scrollPosition: new THREE.Vector2(0, 0),
-      scrollVelocity: new THREE.Vector2(0, 0)
+      scrollPosition: { x: 0, y: 0 }
     }
   },
   watch: {
-    scrollable() {
-      this.scroller.enabled = this.disabled ? false : this.scrollable
-    },
-    draggable() {
-      this.dragger.enabled = this.disabled ? false : this.draggable
-    },
     disabled() {
-      if (this.disabled) {
-        this.scroller.enabled = false
-        this.dragger.enabled = false
-      } else {
-        this.scroller.enabled = this.scrollable
-        this.dragger.enabled = this.draggable
-      }
+      this.scroller.disabled = this.disabled
     }
   },
   mounted() {
     this.scroller = new Scroller(this.$refs.inner)
     this.scroller.events.on('scroll', this.onScroll)
-    this.scroller.enabled = this.disabled ? false : this.scrollable
+    this.scroller.disabled = this.disabled
+
+    const virtualScroll = useVirtualScroll()
+    virtualScroll.on(this.onVirtualScroll)
 
     this.dragger = new Dragger(this.$el)
     this.dragger.events.on('drag:move', this.onDrag)
-    this.dragger.enabled = this.disabled ? false : this.draggable
 
     this.$viewport.events.on('resize', this.onWindowResize)
   },
@@ -93,12 +83,17 @@ export default {
         this.scroller.resize()
       }
     },
+    onVirtualScroll({ deltaX, deltaY }) {
+      if (!this.scrollable) return
+      this.scroller.onScroll({ deltaX, deltaY })
+    },
     onScroll({ position, progress, velocity }) {
+      position = { x: position.x, y: -position.y }
       this.$emit('scroll', { position, progress, velocity })
-      this.scrollPosition.copy(position)
-      this.scrollVelocity.copy(velocity)
+      this.scrollPosition = position
     },
     onDrag({ deltaX, deltaY }) {
+      if (!this.draggable) return
       this.scroller.onScroll({ deltaX: -deltaX, deltaY: -deltaY })
     }
   }

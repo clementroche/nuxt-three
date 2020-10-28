@@ -38,28 +38,17 @@ class WebGL {
     //   document.getElementById('__nuxt')
     // )
 
-    // canvas
-    this.canvas = document.createElement('canvas')
-
-    // WEBGL2
-    const { WEBGL } = require('three/examples/jsm/WebGL')
-    const context = this.canvas.getContext(
-      WEBGL.isWebGL2Available() ? 'webgl2' : 'webgl',
-      { alpha: false }
-    )
-
     // renderer
     this.renderer = new THREE.WebGLRenderer({
-      canvas: this.canvas,
-      context,
-      scene: this.scene,
+      alpha: true,
       powerPreference: 'high-performance',
       stencil: false,
       depth: false,
-      antialias: false
+      antialias: false,
+      precision: 'highp'
     })
     this.renderer.setSize(viewport.width, viewport.height)
-    this.renderer.setPixelRatio(window.devicePixelRatio || 1)
+    this.renderer.setPixelRatio(1)
 
     // composer
     const Composer = require('@/webgl/composer').default
@@ -70,24 +59,27 @@ class WebGL {
     })
 
     // stats
-    this.stats = new Stats()
-    document.body.appendChild(this.stats.dom)
-    RAF.add('stats-begin', this.stats.begin, -1000)
-    RAF.add('stats-end', this.stats.end, 1000)
+    if (process.env.NODE_ENV === 'development') {
+      this.stats = new Stats()
+      document.body.appendChild(this.stats.dom)
+      RAF.add('stats-begin', this.stats.begin, -1000)
+      RAF.add('stats-end', this.stats.end, 1000)
+    }
 
     // raycaster
     const Raycaster = require('@/webgl/raycaster').default
     this.raycaster = new Raycaster(this.camera)
 
     // events
-    viewport.events.on('resize', this.onWindowResize.bind(this))
+    viewport.events.on('resize', this.onWindowResize)
 
     // raf
-    RAF.add('use-webgl', this.loop.bind(this), 1)
+    RAF.add('use-webgl', this.loop, 10)
   }
 
-  loop(clock) {
+  loop = (clock) => {
     this.renderer.setSize(viewport.width, viewport.height)
+    // this.renderer.render(this.scene, this.camera)
     this.composer.render(clock)
     this.renderer.renderLists.dispose()
   }
@@ -107,7 +99,7 @@ class WebGL {
     return { width, height }
   }
 
-  onWindowResize() {
+  onWindowResize = () => {
     this.camera.left = viewport.width / -2
     this.camera.right = viewport.width / 2
     this.camera.top = viewport.height / 2

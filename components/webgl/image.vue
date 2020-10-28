@@ -1,84 +1,30 @@
 <template>
-  <!-- https://developer.mozilla.org/fr/docs/Apprendre/HTML/Comment/Ajouter_des_images_adaptatives_%C3%A0_une_page_web -->
-  <picture
-    v-intersection-observer="{
-      onChange: (value) => {
-        inView = value
-      },
-      threshold: 0.1,
-      triggerOnce: true
-    }"
-    :class="{ 'image--visible': native && currentSrc }"
-    :style="aspectRatio ? `--aspect-ratio:calc(${aspectRatio})` : ''"
-    class="image"
-  >
-    <source
-      :srcset="lazyloading ? (inViewLoad ? large : '') : large"
-      media="(min-width: 769px)"
-    />
-    <!-- todo fallback https://stackoverflow.com/a/31186336 -->
-    <img
-      ref="image"
-      :srcset="lazyloading ? (inViewLoad ? small : '') : small"
-      :alt="alt"
-      :style="`object-fit:${objectFit};`"
-      @load="onLoad"
-      draggable="false"
-    />
-    <div
-      v-intersection-observer="{
-        onChange: (value) => {
-          inViewLoad = value
-        },
-        triggerOnce: true
-      }"
-      class="image__trigger"
-    />
-  </picture>
+  <e-image
+    @src="
+      (src) => {
+        currentSrc = src
+      }
+    "
+    v-bind="$attrs"
+    class="webglImage"
+  />
 </template>
 
 <script>
-import gsap from 'gsap'
-
 import useWebGL from '@/hooks/use-webgl'
 import useRAF from '@/hooks/use-raf'
-
 import boundingRect from '@/mixins/bounding-rect'
-
+import scrollMixin from '@/mixins/scroll'
 import vertexShader from '@/webgl/shaders/images/vertex.glsl'
 import fragmentShader from '@/webgl/shaders/images/fragment.glsl'
 
 export default {
-  mixins: [boundingRect],
+  mixins: [boundingRect, scrollMixin],
   inheritAttrs: false,
   props: {
-    small: {
-      type: String,
-      default: ''
-    },
-    large: {
-      type: String,
-      default: ''
-    },
-    alt: {
-      type: String,
-      default: ''
-    },
-    aspectRatio: {
-      type: Number,
-      default: undefined
-    },
-    lazyloading: {
-      type: Boolean,
-      default: true
-    },
     objectFit: {
       type: String,
       default: 'cover'
-    },
-    native: {
-      type: Boolean,
-      default: false
     },
     uniforms: {
       type: Object,
@@ -91,134 +37,52 @@ export default {
     fragmentShader: {
       type: String,
       default: fragmentShader
-    },
-    appearAnimation: {
-      type: Boolean,
-      default: true
-    },
-    flowmap: {
-      type: Boolean,
-      default: false
     }
   },
   data() {
     return {
-      inView: false,
-      inViewLoad: false,
-      currentSrc: undefined,
-      textureLoaded: false
-    }
-  },
-  computed: {
-    canAppear() {
-      return this.inView && this.textureLoaded
+      currentSrc: false
     }
   },
   watch: {
-    canAppear() {
-      if (this.canAppear && this.appearAnimation) {
-        gsap.to(this.material.uniforms.uOpacity, {
-          duration: 0.6,
-          value: 1,
-          ease: 'expo.out'
-        })
+    async currentSrc() {
+      const texture = await this.loadTexture(this.currentSrc)
+      this.loaded = true
+
+      texture.needsUpdate = true
+      texture.wrapS = THREE.ClampToEdgeWrapping
+      texture.wrapT = THREE.ClampToEdgeWrapping
+
+      if (this.material.uniforms.uMap.value) {
+        this.material.uniforms.uMap.value.dispose()
       }
-    },
-    currentSrc() {
-      if (!this.native) this.initTexture()
-    },
-    native() {
-      if (!this.native && !this.mesh) {
-        this.init()
-      } else if ((this.native && this.mesh) || (!this.mesh && this.native)) {
-        this.mesh.visible = false
-      } else if (this.mesh && !this.native) {
-        this.mesh.visible = true
-      }
+      this.material.uniforms.uMap.value = texture
+
+      this.naturalRatio =
+        texture.image.naturalWidth / texture.image.naturalHeight
+
+      this.resize()
     }
   },
   mounted() {
-    if (!this.native) this.init()
-  },
-  beforeDestroy() {
-    if (this.mesh) {
-      const RAF = useRAF()
-      RAF.remove(this.mesh.uuid)
-    }
+    this.initMesh()
 
-    if (this.preventDestroy) {
-      return
-    }
+    const { DOMScene } = useWebGL()
+    DOMScene.add(this.mesh)
 
-    if (this.texture) this.texture.dispose()
-    if (this.mesh) {
-      this.mesh.material.dispose()
-      this.mesh.geometry.dispose()
+    const RAF = useRAF()
+    this.loop()
+    RAF.add('image' + this.mesh.uuid, this.loop, 0)
 
-      const { DOMScene, composer } = useWebGL()
-      DOMScene.remove(this.mesh)
-
-      if (this.flowmap) composer.mouseFlowmapEffect.deselectObject(this.mesh)
-    }
+    this.resize()
+    this.$viewport.events.on('resize', this.resize)
   },
   methods: {
-    init() {
-      const { DOMScene, composer } = useWebGL()
-
-      this.initMesh()
-      DOMScene.add(this.mesh)
-
-      if (this.flowmap) composer.mouseFlowmapEffect.selectObject(this.mesh)
-
-      this.update()
-      const RAF = useRAF()
-      RAF.add(this.mesh.uuid, this.update, 0)
-    },
-    initMesh() {
-      this.geometry = new THREE.PlaneBufferGeometry(1, 1)
-      this.material = new THREE.ShaderMaterial({
-        uniforms: {
-          uMap: {
-            value: this.texture || null
-          },
-          uRatio: {
-            value: new THREE.Vector2()
-          },
-          uOpacity: {
-            value: this.appearAnimation ? 0 : 1
-          },
-          ...this.uniforms
-        },
-        vertexShader: this.vertexShader,
-        fragmentShader: this.fragmentShader,
-        // defines: this.defines,
-        transparent: true
-      })
-
-      this.mesh = new THREE.Mesh(this.geometry, this.material)
-    },
-    async initTexture() {
-      this.texture = await this.loadTexture()
-      this.texture.needsUpdate = true
-      this.texture.wrapS = THREE.ClampToEdgeWrapping
-      this.texture.wrapT = THREE.ClampToEdgeWrapping
-      // this.texture.minFilter = THREE.NearestFilter
-      // this.texture.magFilter = THREE.LinearFilter
-
-      if (!this.delegateTexture) {
-        this.material.uniforms.uMap.value = this.texture
-        this.naturalRatio =
-          this.texture.image.naturalWidth / this.texture.image.naturalHeight
-
-        this.textureLoaded = true
-      }
-    },
-    loadTexture() {
+    loadTexture(src) {
       const loader = new THREE.TextureLoader()
-
       return new Promise((resolve, reject) => {
         loader.load(
-          this.currentSrc,
+          src,
           (texture) => {
             resolve(texture)
           },
@@ -229,119 +93,89 @@ export default {
         )
       })
     },
-    onLoad() {
-      this.currentSrc = this.$refs.image.currentSrc
+    initMesh() {
+      this.geometry = new THREE.PlaneBufferGeometry(1, 1)
+
+      this.material = new THREE.ShaderMaterial({
+        uniforms: {
+          uMap: {
+            value: null
+          },
+          uRatio: {
+            value: new THREE.Vector2()
+          },
+          uOpacity: {
+            value: 1
+          },
+          ...this.uniforms
+        },
+        vertexShader: this.vertexShader ? this.vertexShader : vertexShader,
+        fragmentShader: this.fragmentShader
+          ? this.fragmentShader
+          : fragmentShader,
+        // defines: this.defines,
+        transparent: true
+      })
+      this.mesh = new THREE.Mesh(this.geometry, this.material)
     },
-    computeRatio() {
-      this.ratio = this.boundingRect.width / this.boundingRect.height
+    loop() {
+      if (this.preventPosition) return
+      const elementCenterX = this.boundingRect.width / 2
+      const elementCenterY = this.boundingRect.height / 2
+      const elementX = this.boundingRect.left - this.initialScroll.x
+      const elementY = this.boundingRect.top + this.initialScroll.y
+      const x =
+        -this.$viewport.width / 2 +
+        elementX +
+        elementCenterX +
+        this.scrollPosition.x +
+        (this.deltaX || 0)
+      const y =
+        this.$viewport.height / 2 -
+        elementY -
+        elementCenterY +
+        this.scrollPosition.y +
+        (this.deltaY || 0)
+      this.mesh.position.set(x, y, 0)
+    },
+    resize() {
+      const meshRatio = this.boundingRect.width / this.boundingRect.height
 
       let width
       if (this.objectFit === 'contain') {
         width =
-          this.ratio > this.naturalRatio
+          meshRatio > this.naturalRatio
             ? this.boundingRect.height * this.naturalRatio
             : this.boundingRect.width
       } else {
         width =
-          this.ratio > this.naturalRatio
+          meshRatio > this.naturalRatio
             ? this.boundingRect.width
             : this.boundingRect.height * this.naturalRatio
       }
       const height = width / this.naturalRatio
-
       const ratio = new THREE.Vector2(
         this.boundingRect.width / width,
         this.boundingRect.height / height
       )
 
-      if (!this.delegateRatio) {
+      if (!this.preventResize) {
         this.material.uniforms.uRatio.value.copy(ratio)
-      }
-
-      return ratio
-    },
-    computePosition() {
-      const elementCenterX = this.boundingRect.width / 2
-      const elementCenterY = this.boundingRect.height / 2
-      const elementX = this.boundingRect.left - this.initialScroll.x
-      const elementY = this.boundingRect.top - this.initialScroll.y
-
-      return {
-        x:
-          -this.$viewport.width / 2 +
-          elementX +
-          elementCenterX +
-          this.scrollPosition.x,
-        y:
-          this.$viewport.height / 2 -
-          elementY -
-          elementCenterY -
-          this.scrollPosition.y
-      }
-    },
-    update() {
-      this.computeRatio()
-      const { x, y } = this.computePosition()
-      this.mesh.position.set(x, y, 0)
-
-      if (this.boundingRect.width !== 0 && this.boundingRect.height !== 0) {
+        // this.material.uniforms.uMeshRatio.value = meshRatio
         this.mesh.scale.set(
           this.boundingRect.width,
           this.boundingRect.height,
           1
         )
       }
+      return ratio
     }
   }
 }
 </script>
 
 <style lang="scss">
-.image {
-  display: inline-block;
+.webglImage {
   opacity: 0;
-  // opacity: 0;
-  // visibility: hidden;
-  transition: opacity 400ms var(--ease-out-quint);
-  // &--native {
-  //   visibility: visible;
-  // }
-
-  &--visible {
-    opacity: 1;
-    // visibility: visible;
-  }
-
-  &__trigger {
-    pointer-events: none;
-  }
-
-  img {
-    height: 100%;
-    width: 100%;
-  }
-
-  &[style*='--aspect-ratio'] {
-    display: block;
-
-    img {
-      display: block;
-      height: 100%;
-      left: 0;
-      position: absolute;
-      top: 0;
-      width: 100%;
-    }
-  }
-
-  &__trigger {
-    height: calc(100% + 500px);
-    left: 0;
-    position: absolute;
-    top: 0;
-    // transform: translate(-50%, -50%);
-    transform: translateY(-250px);
-    width: 100%;
-  }
 }
 </style>

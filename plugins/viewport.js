@@ -1,5 +1,6 @@
 import Events from 'events'
 import Vue from 'vue'
+import events from './events'
 
 /* eslint-disable nuxt/no-env-in-hooks */
 
@@ -18,6 +19,7 @@ const viewport = new Vue({
     this.events.setMaxListeners(Infinity)
     this.onWindowResize()
     window.addEventListener('resize', this.onWindowResize, false)
+    events.on('viewport:resize', this.onWindowResize)
   },
   beforeDestroy() {
     if (!process.client) return

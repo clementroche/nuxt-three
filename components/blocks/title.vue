@@ -77,7 +77,7 @@ export default {
       this.cube.rotation.set(-this.mouse.y * 0.2, this.mouse.x * 0.2, 0)
 
       this.cube.position.y =
-        -this.scrollPosition.y + this.$viewport.height * 0.05
+        this.scrollPosition.y + this.$viewport.height * 0.05
     },
     onRaycast(intersections) {
       this.hover = intersections.some(

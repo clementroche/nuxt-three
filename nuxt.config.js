@@ -119,7 +119,6 @@ export default {
   plugins: [
     { src: '~/plugins/events.js', mode: 'client' },
     { src: '~/plugins/viewport.js', mode: 'client' },
-    // { src: '~/plugins/scroll.js', mode: 'client' },
     { src: '~/plugins/mouse.js', mode: 'client' },
     { src: '~/plugins/directives.js', mode: 'client' }
   ],
@@ -132,7 +131,10 @@ export default {
       })
     },
     babel: {
-      plugins: ['@babel/plugin-proposal-object-rest-spread'],
+      plugins: [
+        '@babel/plugin-proposal-object-rest-spread',
+        '@babel/proposal-class-properties'
+      ],
       presets({ isServer }) {
         return [
           [

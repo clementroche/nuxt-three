@@ -10,8 +10,8 @@ import useGUI from '@/hooks/use-gui'
 
 export default {
   mounted() {
-    const { canvas } = useWebGL()
-    this.$el.appendChild(canvas)
+    const { renderer } = useWebGL()
+    this.$el.appendChild(renderer.domElement)
   },
   beforeDestroy() {
     const WebGL = useWebGL()

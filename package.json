@@ -27,17 +27,18 @@
     "gsap": "^3.2.5",
     "include-media": "^1.4.9",
     "intersection-observer-polyfill": "^0.1.0",
-    "nuxt": "^2.14.1",
+    "nuxt": "^2.14.7",
     "nuxt-compress": "^1.1.0",
     "nuxt-helmet": "^1.2.3",
     "nuxt-mq": "^2.0.1",
     "nuxt-ssr-cache": "^1.5.1",
-    "postprocessing": "^6.13.0",
+    "postprocessing": "^6.17.4",
     "raw-loader": "^4.0.1",
     "stats.js": "^0.17.0",
-    "three": "0.119.1",
+    "three": "0.122.0",
     "three-dat.gui": "^2.0.6",
-    "virtual-scroll": "^1.5.2"
+    "virtual-scroll": "^1.5.2",
+    "vue-observe-visibility": "^0.4.6"
   },
   "devDependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.9.6",

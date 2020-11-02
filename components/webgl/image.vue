@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import gsap from 'gsap'
 import useWebGL from '@/hooks/use-webgl'
 import useRAF from '@/hooks/use-raf'
 import boundingRect from '@/mixins/bounding-rect'
@@ -37,17 +38,26 @@ export default {
     fragmentShader: {
       type: String,
       default: fragmentShader
+    },
+    geometryPrecision: {
+      type: Number,
+      default: 1
+    },
+    flowmap: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
+      loaded: false,
       currentSrc: false
     }
   },
   watch: {
     async currentSrc() {
+      if (this.preventTexture) return
       const texture = await this.loadTexture(this.currentSrc)
-      this.loaded = true
 
       texture.needsUpdate = true
       texture.wrapS = THREE.ClampToEdgeWrapping
@@ -62,13 +72,23 @@ export default {
         texture.image.naturalWidth / texture.image.naturalHeight
 
       this.resize()
+
+      this.loaded = true
+    },
+    loaded() {
+      gsap.to(this.material.uniforms.uOpacity, {
+        value: 1,
+        duration: 1,
+        ease: 'expo.out'
+      })
     }
   },
   mounted() {
     this.initMesh()
 
-    const { DOMScene } = useWebGL()
+    const { DOMScene, composer } = useWebGL()
     DOMScene.add(this.mesh)
+    if (this.flowmap) composer.mouseFlowmapEffect.selectObject(this.mesh)
 
     const RAF = useRAF()
     this.loop()
@@ -77,7 +97,25 @@ export default {
     this.resize()
     this.$viewport.events.on('resize', this.resize)
   },
+  async beforeDestroy() {
+    if (this.preventDestroy) return
+
+    await gsap.to(this.material.uniforms.uOpacity, {
+      value: 0,
+      duration: 0.5,
+      ease: 'expo.out'
+    })
+
+    this.destroy()
+  },
   methods: {
+    destroy() {
+      const { DOMScene } = useWebGL()
+      const RAF = useRAF()
+      RAF.remove('image' + this.mesh.uuid)
+      this.$viewport.events.off('resize', this.resize)
+      DOMScene.remove(this.mesh)
+    },
     loadTexture(src) {
       const loader = new THREE.TextureLoader()
       return new Promise((resolve, reject) => {
@@ -94,7 +132,12 @@ export default {
       })
     },
     initMesh() {
-      this.geometry = new THREE.PlaneBufferGeometry(1, 1)
+      this.geometry = new THREE.PlaneBufferGeometry(
+        1,
+        1,
+        this.geometryPrecision,
+        this.geometryPrecision
+      )
 
       this.material = new THREE.ShaderMaterial({
         uniforms: {
@@ -105,7 +148,7 @@ export default {
             value: new THREE.Vector2()
           },
           uOpacity: {
-            value: 1
+            value: 0
           },
           ...this.uniforms
         },
@@ -176,6 +219,6 @@ export default {
 
 <style lang="scss">
 .webglImage {
-  opacity: 0;
+  opacity: 0 !important;
 }
 </style>

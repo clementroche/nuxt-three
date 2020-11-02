@@ -1,10 +1,10 @@
 <template>
   <picture
     :style="aspectRatio ? { '--aspect-ratio': aspectRatio } : {}"
+    :class="{ 'image--loaded': !!currentSrc }"
     class="image"
   >
     <div
-      v-show="!inView"
       v-observe-visibility="{
         callback: (isVisible) => {
           inView = isVisible
@@ -23,6 +23,9 @@
       @load="onLoad"
       :src="inView ? src : ''"
       v-bind="inView ? $attrs : {}"
+      :style="{ 'object-fit': objectFit }"
+      :width="width"
+      :height="height"
     />
   </picture>
 </template>
@@ -43,9 +46,17 @@ export default {
       type: Number,
       default: undefined
     },
-    visible: {
-      type: Boolean,
-      default: true
+    objectFit: {
+      type: String,
+      default: 'cover'
+    },
+    width: {
+      type: Number,
+      default: 1
+    },
+    height: {
+      type: Number,
+      default: 1
     }
   },
   data() {
@@ -54,14 +65,14 @@ export default {
       inView: false
     }
   },
-  methods: {
-    onLoad() {
-      this.currentSrc = this.$refs.img.currentSrc
-    }
-  },
   watch: {
     currentSrc() {
       this.$emit('src', this.currentSrc)
+    }
+  },
+  methods: {
+    onLoad() {
+      this.currentSrc = this.$refs.img.currentSrc
     }
   }
 }
@@ -70,20 +81,26 @@ export default {
 <style lang="scss">
 .image {
   display: block;
+  opacity: 0;
   position: relative;
+  transition: opacity 1s var(--ease-out-quint);
+
+  &--loaded {
+    opacity: 1;
+  }
 
   source {
     display: none;
   }
 
   &__trigger {
-    height: calc(100% + 1000px);
-    left: 0;
+    height: calc(100% + 500px);
+    left: 50%;
     position: absolute;
-    top: 0;
-    transform: translateY(-500px);
+    top: 50%;
+    transform: translate(-50%, -50%);
     visibility: hidden;
-    width: 100%;
+    width: calc(100% + 10000px);
   }
 
   img {

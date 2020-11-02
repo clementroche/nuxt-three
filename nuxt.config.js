@@ -114,6 +114,30 @@ export default {
       extensions: ['vue']
     }
   ],
+  pageTransition: {
+    name: 'page',
+    mode: 'out-in',
+    beforeLeave(el) {
+      // console.log('Before leave...')
+    },
+    leave(el) {
+      // console.log('Enter...')
+    },
+    afterLeave(el) {
+      // console.log('After leave...')
+      this.$events.emit('router:change')
+      this.$events.emit('cursor:unstick')
+    },
+    beforeEnter(el) {
+      // console.log('Before enter...')
+    },
+    enter(el) {
+      // console.log('Enter...')
+    },
+    afterEnter(el) {
+      // console.log('After enter...')
+    }
+  },
   loading: false,
   css: ['@/assets/styles/app.scss'],
   plugins: [

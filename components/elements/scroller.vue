@@ -14,6 +14,7 @@
 
 <script>
 import gsap from 'gsap'
+import ResizeObserver from 'resize-observer-polyfill'
 import VelocityTracker from '@/libs/gsap-bonus/utils/VelocityTracker'
 import useVirtualScroll from '@/hooks/use-virtual-scroll'
 import frame from '@/mixins/frame'
@@ -40,13 +41,7 @@ export default {
     }
   },
 
-  updated() {
-    // `translate3d(${lerpedPosition.x}px,${-lerpedPosition.y}px,0)`
-  },
-
   mounted() {
-    // this.resize()
-
     this.resizeObserver = new ResizeObserver((entries) => {
       const boundingRect = entries[0].contentRect
 

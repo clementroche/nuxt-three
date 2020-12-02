@@ -3,7 +3,7 @@
     <block-title />
     <!-- <block-images-grid class="appIndex__imagesGrid" /> -->
     <div class="pageIndex__image">
-      <component
+      <!-- <component
         :is="this.$mq === 'desktop' ? 'webgl-image' : 'native-image'"
         :sources="[
           {
@@ -18,6 +18,11 @@
             sizes: '(max-width: 400px) 400px, (max-width: 769px) 769px'
           }
         ]"
+        :src="'/images/webp/1200w.webp'"
+        :aspectRatio="1200 / 1664"
+      /> -->
+
+      <webgl-image
         :src="'/images/webp/1200w.webp'"
         :aspectRatio="1200 / 1664"
       />

@@ -144,7 +144,8 @@ export default {
     { src: '~/plugins/events.js', mode: 'client' },
     { src: '~/plugins/viewport.js', mode: 'client' },
     { src: '~/plugins/mouse.js', mode: 'client' },
-    { src: '~/plugins/directives.js', mode: 'client' }
+    { src: '~/plugins/directives.js', mode: 'client' },
+    { src: '~/plugins/gsap.js', mode: 'client' }
   ],
   build: {
     extend(config, ctx) {

@@ -19,6 +19,7 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-unused-expressions': 0,
     'no-undef': 0,
     'new-cap': 0,
     'unicorn/number-literal-case': 0,

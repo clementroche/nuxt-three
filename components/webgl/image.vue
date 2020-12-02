@@ -13,14 +13,15 @@
 <script>
 import gsap from 'gsap'
 import useWebGL from '@/hooks/use-webgl'
-import useRAF from '@/hooks/use-raf'
 import boundingRect from '@/mixins/bounding-rect'
-import scrollMixin from '@/mixins/scroll'
+import viewportResize from '@/mixins/viewport-resize'
+import scroll from '@/mixins/scroll'
+import frame from '@/mixins/frame'
 import vertexShader from '@/webgl/shaders/images/vertex.glsl'
 import fragmentShader from '@/webgl/shaders/images/fragment.glsl'
 
 export default {
-  mixins: [boundingRect, scrollMixin],
+  mixins: [boundingRect, scroll, viewportResize, frame],
   inheritAttrs: false,
   props: {
     objectFit: {
@@ -42,10 +43,6 @@ export default {
     geometryPrecision: {
       type: Number,
       default: 1
-    },
-    flowmap: {
-      type: Boolean,
-      default: false
     }
   },
   data() {
@@ -86,16 +83,10 @@ export default {
   mounted() {
     this.initMesh()
 
-    const { DOMScene, composer } = useWebGL()
+    const { DOMScene } = useWebGL()
     DOMScene.add(this.mesh)
-    if (this.flowmap) composer.mouseFlowmapEffect.selectObject(this.mesh)
-
-    const RAF = useRAF()
-    this.loop()
-    RAF.add('image' + this.mesh.uuid, this.loop, 0)
 
     this.resize()
-    this.$viewport.events.on('resize', this.resize)
   },
   async beforeDestroy() {
     if (this.preventDestroy) return
@@ -109,11 +100,11 @@ export default {
     this.destroy()
   },
   methods: {
+    onViewportResize() {
+      this.resize()
+    },
     destroy() {
       const { DOMScene } = useWebGL()
-      const RAF = useRAF()
-      RAF.remove('image' + this.mesh.uuid)
-      this.$viewport.events.off('resize', this.resize)
       DOMScene.remove(this.mesh)
     },
     loadTexture(src) {
@@ -161,12 +152,12 @@ export default {
       })
       this.mesh = new THREE.Mesh(this.geometry, this.material)
     },
-    loop() {
+    onFrame() {
       if (this.preventPosition) return
       const elementCenterX = this.boundingRect.width / 2
       const elementCenterY = this.boundingRect.height / 2
-      const elementX = this.boundingRect.left - this.initialScroll.x
-      const elementY = this.boundingRect.top + this.initialScroll.y
+      const elementX = this.boundingRect.left - this.scrollInitalPosition.x
+      const elementY = this.boundingRect.top + this.scrollInitalPosition.y
       const x =
         -this.$viewport.width / 2 +
         elementX +

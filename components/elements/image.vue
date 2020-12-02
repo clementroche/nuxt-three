@@ -21,11 +21,9 @@
     <img
       ref="img"
       @load="onLoad"
-      :src="inView ? src : ''"
-      v-bind="inView ? $attrs : {}"
+      v-bind="inView || !lazyLoad ? { ...$attrs, ...{ src: src } } : {}"
       :style="{ 'object-fit': objectFit }"
-      :width="width"
-      :height="height"
+      alt=""
     />
   </picture>
 </template>
@@ -50,13 +48,9 @@ export default {
       type: String,
       default: 'cover'
     },
-    width: {
-      type: Number,
-      default: 1
-    },
-    height: {
-      type: Number,
-      default: 1
+    lazyLoad: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -72,6 +66,7 @@ export default {
   },
   methods: {
     onLoad() {
+      if (!this.$refs.img) return
       this.currentSrc = this.$refs.img.currentSrc
     }
   }

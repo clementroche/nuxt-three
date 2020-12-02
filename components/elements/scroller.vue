@@ -1,17 +1,11 @@
 <template>
-  <div :class="{ 'scroller--disabled': disabled }" class="scroller">
+  <div class="e-scroller">
     <div
       ref="inner"
-      :style="
-        scrollable || draggable
-          ? {
-              transform: `translate3d(${
-                scrollPosition.x
-              }px, ${-scrollPosition.y}px, 0px)`
-            }
-          : {}
-      "
-      class="scroller__inner"
+      :style="{
+        transform: transform
+      }"
+      class="e-scroller__inner"
     >
       <slot />
     </div>
@@ -19,99 +13,109 @@
 </template>
 
 <script>
-import Scroller from '@/assets/js/scroller'
-import Dragger from '@/assets/js/dragger'
+import gsap from 'gsap'
+import VelocityTracker from '@/libs/gsap-bonus/utils/VelocityTracker'
 import useVirtualScroll from '@/hooks/use-virtual-scroll'
+import frame from '@/mixins/frame'
+import boundingRect from '@/mixins/bounding-rect'
 
 export default {
-  name: 'Scroller',
-  props: {
-    scrollable: {
-      type: Boolean,
-      default: true
-    },
-    draggable: {
-      type: Boolean,
-      default: false
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    }
-  },
+  mixins: [frame, boundingRect],
   data() {
     return {
-      scrollPosition: { x: 0, y: 0 }
+      position: { x: 0, y: 0 },
+      lerpedPosition: { x: 0, y: 0 },
+      velocity: { x: 0, y: 0 },
+      maxScroll: { x: 0, y: 0 },
+      transform: 'translate3d(0px,0px,0px)'
     }
   },
-  watch: {
-    disabled() {
-      this.scroller.disabled = this.disabled
+
+  computed: {
+    progress() {
+      return {
+        x: this.lerpedPosition.x / this.maxScroll.x,
+        y: this.lerpedPosition.y / this.maxScroll.y
+      }
     }
   },
+
+  updated() {
+    // `translate3d(${lerpedPosition.x}px,${-lerpedPosition.y}px,0)`
+  },
+
   mounted() {
-    this.scroller = new Scroller(this.$refs.inner)
-    this.scroller.events.on('scroll', this.onScroll)
-    this.scroller.disabled = this.disabled
+    // this.resize()
+
+    this.resizeObserver = new ResizeObserver((entries) => {
+      const boundingRect = entries[0].contentRect
+
+      this.maxScroll = {
+        x: boundingRect.width - this.boundingRect.width,
+        y: boundingRect.height - this.boundingRect.height
+      }
+    })
+
+    this.resizeObserver.observe(this.$refs.inner)
 
     const virtualScroll = useVirtualScroll()
     virtualScroll.on(this.onVirtualScroll)
 
-    this.dragger = new Dragger(this.$el)
-    this.dragger.events.on('drag:move', this.onDrag)
-
-    this.$viewport.events.on('resize', this.onWindowResize)
+    this.velocityTracker = VelocityTracker.track(this.lerpedPosition, 'x,y')[0]
   },
+
   beforeDestroy() {
-    this.scroller.destroy()
-    this.scroller.events.off('scroll', this.onScroll)
+    this.resizeObserver.unobserve(this.$refs.inner)
 
-    this.dragger.destroy()
-    this.dragger.events.off('drag:move', this.onDrag)
-
-    this.$viewport.events.off('resize', this.onWindowResize)
+    const virtualScroll = useVirtualScroll()
+    virtualScroll.off(this.onVirtualScroll)
   },
+
   methods: {
-    reset() {
-      if (this.scroller) {
-        this.scroller.reset()
-        // this.scroller.resize()
-      }
+    dispatch() {
+      this.$emit('update', {
+        position: { ...this.position },
+        lerpedPosition: { ...this.lerpedPosition },
+        velocity: { ...this.velocity },
+        progress: { ...this.progress }
+      })
     },
-    onWindowResize() {
-      if (this.scroller) {
-        this.scroller.resize()
+    onBeforeFrame(e) {
+      if (this.velocityTracker) {
+        this.velocity = {
+          x: this.velocityTracker.get('x'),
+          y: this.velocityTracker.get('y')
+        }
       }
+
+      this.dispatch()
+    },
+    onAfterRender() {
+      this.transform = `translate3d(${this.lerpedPosition.x}px,${-this
+        .lerpedPosition.y}px,0)`
+    },
+    scrollTo({ x, y, props = { duration: 1, ease: 'expo.out' } }) {
+      this.tween?.kill()
+      this.tween = gsap.to(this.lerpedPosition, {
+        ...props,
+        x: x === undefined ? this.lerpedPosition.x : x,
+        y: y === undefined ? this.lerpedPosition.y : y
+      })
     },
     onVirtualScroll({ deltaX, deltaY }) {
-      if (!this.scrollable) return
-      this.scroller.onScroll({ deltaX, deltaY })
+      this.position.y = gsap.utils.clamp(
+        0,
+        this.maxScroll.y,
+        this.position.y - deltaY
+      )
+
+      this.scrollTo({ ...this.position })
     },
-    onScroll({ position, progress, velocity }) {
-      position = { x: position.x, y: -position.y }
-      this.$emit('scroll', { position, progress, velocity })
-      this.scrollPosition = position
-    },
-    onDrag({ deltaX, deltaY }) {
-      if (!this.draggable) return
-      this.scroller.onScroll({ deltaX: -deltaX, deltaY: -deltaY })
+    reset() {
+      this.position = this.lerpedScrollPosition = { x: 0, y: 0 }
     }
   }
 }
 </script>
 
-<style lang="scss">
-.scroller {
-  height: 100%;
-  overflow: hidden;
-
-  // &__inner {
-  //   will-change: transform;
-  // }
-
-  // &--disabled {
-  //   height: auto;
-  //   overflow: auto;
-  // }
-}
-</style>
+<style lang="scss"></style>

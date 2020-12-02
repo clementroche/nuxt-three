@@ -8,12 +8,14 @@
 import { mapState } from 'vuex'
 import gsap from 'gsap'
 import useWebGL from '@/hooks/use-webgl'
-import useRAF from '@/hooks/use-raf'
+// import useRAF from '@/hooks/use-raf'
+import frame from '@/mixins/frame'
 
 const SCALE_OUT = 0.2
 const SCALE_IN = 0.3
 
 export default {
+  mixins: [frame],
   data() {
     return {
       mouse: new THREE.Vector2(),
@@ -52,12 +54,12 @@ export default {
 
     this.addBox()
 
-    const RAF = useRAF()
-    RAF.add('title', this.loop, 0)
+    // const RAF = useRAF()
+    // RAF.add('title', this.loop, 0)
   },
   beforeDestroy() {
-    const RAF = useRAF()
-    RAF.remove('title')
+    // const RAF = useRAF()
+    // RAF.remove('title')
 
     const { DOMScene, raycaster } = useWebGL()
     DOMScene.remove(this.cube)
@@ -67,7 +69,7 @@ export default {
     raycaster.events.off('mousemove', this.onRaycast)
   },
   methods: {
-    loop() {
+    onFrame() {
       this.cube.scale.setScalar(
         (this.$viewport.width <= 769
           ? this.$viewport.width * 2

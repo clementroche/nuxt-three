@@ -1,13 +1,14 @@
 import Stats from 'stats.js'
 
 import viewport from '@/plugins/viewport'
-import useRAF from '@/hooks/use-raf.js'
+// import useRAF from '@/hooks/use-raf.js'
+import useFrame from '@/hooks/use-frame'
 
 let webgl
 
 class WebGL {
   constructor() {
-    const RAF = useRAF()
+    const frame = useFrame()
 
     // clock
     this.clock = new THREE.Clock()
@@ -62,8 +63,10 @@ class WebGL {
     if (process.env.NODE_ENV === 'development') {
       this.stats = new Stats()
       document.body.appendChild(this.stats.dom)
-      RAF.add('stats-begin', this.stats.begin, -1000)
-      RAF.add('stats-end', this.stats.end, 1000)
+      frame.on('statsBegin', this.stats.begin)
+      frame.on('statsEnd', this.stats.end)
+      // RAF.add('stats-begin', this.stats.begin, -1000)
+      // RAF.add('stats-end', this.stats.end, 1000)
     }
 
     // raycaster
@@ -74,13 +77,14 @@ class WebGL {
     viewport.events.on('resize', this.onWindowResize)
 
     // raf
-    RAF.add('use-webgl', this.loop, 10)
+    // RAF.add('use-webgl', this.loop, 10)
+    frame.on('render', this.loop)
   }
 
-  loop = (clock) => {
+  loop = ({ time, deltaTime, frameIndex }) => {
     this.renderer.setSize(viewport.width, viewport.height)
     // this.renderer.render(this.scene, this.camera)
-    this.composer.render(clock)
+    this.composer.render(time)
     this.renderer.renderLists.dispose()
   }
 
@@ -100,18 +104,24 @@ class WebGL {
   }
 
   onWindowResize = () => {
-    this.camera.left = viewport.width / -2
-    this.camera.right = viewport.width / 2
-    this.camera.top = viewport.height / 2
-    this.camera.bottom = viewport.height / -2
+    if (this.camera.type === 'OrthographicCamera') {
+      this.camera.left = viewport.width / -2
+      this.camera.right = viewport.width / 2
+      this.camera.top = viewport.height / 2
+      this.camera.bottom = viewport.height / -2
+    }
     this.camera.updateProjectionMatrix()
   }
 
   destroy() {
-    const RAF = useRAF()
-    RAF.remove('stats-begin')
-    RAF.remove('stats-end')
-    RAF.remove('use-webgl')
+    // const RAF = useRAF()
+    // RAF.remove('stats-begin')
+    // RAF.remove('stats-end')
+    // RAF.remove('use-webgl')
+
+    frame.off('statsBegin', this.stats.begin)
+    frame.off('statsEnd', this.stats.end)
+    frame.off('render', this.loop)
   }
 }
 

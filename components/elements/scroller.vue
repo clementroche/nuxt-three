@@ -40,7 +40,6 @@ export default {
       }
     }
   },
-
   mounted() {
     this.resizeObserver = new ResizeObserver((entries) => {
       const boundingRect = entries[0].contentRect
@@ -77,10 +76,8 @@ export default {
     },
     onBeforeFrame(e) {
       if (this.velocityTracker) {
-        this.velocity = {
-          x: this.velocityTracker.get('x'),
-          y: this.velocityTracker.get('y')
-        }
+        this.velocity.x = this.velocityTracker.get('x')
+        this.velocity.y = this.velocityTracker.get('y')
       }
 
       this.dispatch()

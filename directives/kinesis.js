@@ -36,7 +36,7 @@ export default {
   },
   unbind(el) {
     if (!instances.has(el)) return
-    instances.get(el).dispose()
+    instances.get(el).destroy()
     instances.delete(el)
   }
 }

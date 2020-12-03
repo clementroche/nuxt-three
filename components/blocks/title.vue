@@ -78,8 +78,8 @@ export default {
         )
       }
 
-      this.cube.position.y =
-        this.scrollPosition.y + this.$viewport.height * 0.05
+      // this.cube.position.y =
+      //   this.scrollPosition.y + this.$viewport.height * 0.05
     },
     onRaycast(intersections) {
       this.hover = intersections.some(

@@ -101,6 +101,7 @@ export default {
   },
   methods: {
     onViewportResize() {
+      this.positionate()
       this.resize()
     },
     destroy() {
@@ -152,24 +153,14 @@ export default {
       })
       this.mesh = new THREE.Mesh(this.geometry, this.material)
     },
-    onFrame() {
+    positionate() {
       if (this.preventPosition) return
       const elementCenterX = this.boundingRect.width / 2
       const elementCenterY = this.boundingRect.height / 2
       const elementX = this.boundingRect.left - this.scrollInitalPosition.x
       const elementY = this.boundingRect.top + this.scrollInitalPosition.y
-      const x =
-        -this.$viewport.width / 2 +
-        elementX +
-        elementCenterX +
-        this.scrollPosition.x +
-        (this.deltaX || 0)
-      const y =
-        this.$viewport.height / 2 -
-        elementY -
-        elementCenterY +
-        this.scrollPosition.y +
-        (this.deltaY || 0)
+      const x = -this.$viewport.width / 2 + elementX + elementCenterX
+      const y = this.$viewport.height / 2 - elementY - elementCenterY
       this.mesh.position.set(x, y, 0)
     },
     resize() {

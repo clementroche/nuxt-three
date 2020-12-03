@@ -6,6 +6,7 @@
 
 <script>
 import viewportResize from '@/mixins/viewport-resize'
+import useWebGL from '@/hooks/use-webgl'
 
 export default {
   mixins: [viewportResize],
@@ -15,6 +16,9 @@ export default {
       this.$store.commit('scroll/setPosition', lerpedPosition)
       this.$store.commit('scroll/setProgress', progress)
       this.$store.commit('scroll/setVelocity', velocity)
+
+      const { camera } = useWebGL()
+      camera.position.y = -lerpedPosition.y
     },
     onViewportResize() {
       this.$store.commit(

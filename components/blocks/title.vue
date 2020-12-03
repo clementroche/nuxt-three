@@ -6,21 +6,21 @@
 
 <script>
 import { mapState } from 'vuex'
-import gsap from 'gsap'
+import gsap from '@/libs/gsap-bonus/gsap-core'
 import useWebGL from '@/hooks/use-webgl'
 // import useRAF from '@/hooks/use-raf'
 import frame from '@/mixins/frame'
 
-const SCALE_OUT = 0.2
-const SCALE_IN = 0.3
+const SCALE_OUT = 1
+const SCALE_IN = 1.5
 
 export default {
   mixins: [frame],
   data() {
     return {
-      mouse: new THREE.Vector2(),
-      hover: false,
-      scale: undefined
+      // mouse: new THREE.Vector2(),
+      hover: false
+      // scale: undefined
     }
   },
   computed: {
@@ -30,23 +30,16 @@ export default {
   },
   watch: {
     hover() {
-      gsap.to(this, {
+      const scale = gsap.utils.clamp(200, 500, this.$viewport.width * 0.2)
+      const scalar = this.hover ? scale * SCALE_IN : scale * SCALE_OUT
+
+      gsap.to(this.cube.scale, {
         duration: 2,
         ease: 'expo.out',
-        scale: this.hover ? SCALE_IN : SCALE_OUT
+        x: scalar,
+        y: scalar,
+        z: scalar
       })
-    },
-    '$mouse.normalized': {
-      handler() {
-        const { x, y } = this.$mouse.normalized
-        gsap.to(this.mouse, {
-          ease: 'expo.out',
-          duration: 1,
-          x,
-          y
-        })
-      },
-      deep: true
     }
   },
   mounted() {
@@ -70,13 +63,20 @@ export default {
   },
   methods: {
     onFrame() {
-      this.cube.scale.setScalar(
-        (this.$viewport.width <= 769
-          ? this.$viewport.width * 2
-          : this.$viewport.width) * this.scale
-      )
+      //   if (!this.$mouse.hasMoved) return
+      //   this.cube.scale.setScalar(
+      //     (this.$viewport.width <= 769
+      //       ? this.$viewport.width * 2
+      //       : this.$viewport.width) * this.scale
+      //   )
 
-      this.cube.rotation.set(-this.mouse.y * 0.2, this.mouse.x * 0.2, 0)
+      if (this.$mouse.hasMoved) {
+        this.cube.rotation.set(
+          -this.$mouse.lerpedNormalized.y * 0.2,
+          this.$mouse.lerpedNormalized.x * 0.2,
+          0
+        )
+      }
 
       this.cube.position.y =
         this.scrollPosition.y + this.$viewport.height * 0.05
@@ -92,7 +92,9 @@ export default {
       const geometry = new THREE.DodecahedronBufferGeometry(0.5, 0)
       const material = new THREE.MeshNormalMaterial()
       this.cube = new THREE.Mesh(geometry, material)
-      this.cube.scale.setScalar(this.initialScale)
+      this.cube.scale.setScalar(
+        gsap.utils.clamp(200, 500, this.$viewport.width * 0.2)
+      )
 
       const { DOMScene } = useWebGL()
       DOMScene.add(this.cube)

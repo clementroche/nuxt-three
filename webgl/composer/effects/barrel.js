@@ -5,23 +5,24 @@ const fragment = `
   precision highp float;
   uniform float intensity;
 
-  vec2 barrelPincushion(vec2 uv, float strength) {
-    vec2 st = uv - 0.5;
+  vec2 brownConradyDistortion(in vec2 uv, in float k1, in float k2)
+{
+    uv = uv * 2.0 - 1.0;	// brown conrady takes [-1:1]
+
+    // positive values of K1 give barrel distortion, negative give pincushion
+    float r2 = uv.x*uv.x + uv.y*uv.y;
+    uv *= 1.0 + k1 * r2 + k2 * r2 * r2;
     
-    float ratio = resolution.x/resolution.y;
-
-    float theta = atan(st.x, st.y);
-    vec2 radius = vec2(sqrt(dot(st, st)));
-    radius *= 1.0 + strength * (radius * radius);
-
-    uv = 0.5 + radius * vec2(sin(theta), cos(theta));
-
+    // tangential distortion (due to off center lens elements)
+    // is not modeled in this function, but if it was, the terms would go here
+    
+    uv = (uv * .5 + .5);	// restore -> [0:1]
     return uv;
-  }
+}
 
   void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
     vec2 vUv = uv;
-    vec2 barrelUv = barrelPincushion(vUv, intensity);
+    vec2 barrelUv = brownConradyDistortion(vUv,intensity,0.);
     vUv = barrelUv;
 
     outputColor = texture2D(inputBuffer,vUv);

@@ -1,28 +1,42 @@
-import gsap from 'gsap'
 import mouse from '@/plugins/mouse'
+import useFrame from '@/hooks/use-frame'
+
+const instances = new Map()
+
+class Kinesis {
+  constructor(el, options) {
+    this.el = el
+    this.options = options
+    const frame = useFrame()
+    frame.on('frame', this.onFrame)
+  }
+
+  onFrame = () => {
+    if (!mouse.hasMoved) return
+    const depth = this.options.depth
+    this.el.style.transform = `translate3d(${mouse.lerpedNormalized.x *
+      depth}px,${-mouse.lerpedNormalized.y * depth}px,0px)`
+  }
+
+  destroy() {
+    frame.off('frame', this.onFrame)
+  }
+}
 
 export default {
-  bind(el, binding, { context }) {
+  inserted(el, binding) {
     const params = binding.value || {}
 
     const options = {
       depth: params.depth || 1
     }
 
-    function onMouseMove() {
-      gsap.to(el, {
-        duration: 1,
-        ease: 'expo.out',
-        x: options.depth * mouse.normalized.x,
-        y: options.depth * -mouse.normalized.y
-      })
-    }
-
-    el.vKinesis = onMouseMove.bind(this)
-
-    mouse.events.on('mousemove', el.vKinesis)
+    if (instances.has(el)) return
+    instances.set(el, new Kinesis(el, options))
   },
-  unbind(el, binding, { context }) {
-    mouse.events.off('mousemove', el.vKinesis)
+  unbind(el) {
+    if (!instances.has(el)) return
+    instances.get(el).dispose()
+    instances.delete(el)
   }
 }

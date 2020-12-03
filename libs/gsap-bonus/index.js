@@ -20,7 +20,7 @@ import {
   Circ,
   TweenLite,
   TimelineLite,
-  TimelineMax,
+  TimelineMax
 } from './gsap-core.js'
 import { CSSPlugin } from './CSSPlugin.js'
 const gsapWithCSS = gsap.registerPlugin(CSSPlugin) || gsap
@@ -51,5 +51,5 @@ export {
   Bounce,
   Sine,
   Expo,
-  Circ,
+  Circ
 }

@@ -1,8 +1,8 @@
 import Events from 'events'
-import gsap from 'gsap'
 import Vue from 'vue'
+import gsap from '@/libs/gsap-bonus/gsap-core.js'
 import viewport from '@/plugins/viewport'
-import useRAF from '@/hooks/use-raf'
+import useFrame from '@/hooks/use-frame'
 
 /* eslint-disable nuxt/no-env-in-hooks */
 
@@ -38,8 +38,8 @@ const mouse = new Vue({
   created() {
     if (!process.client) return
 
-    const RAF = useRAF()
-    RAF.add('mouse', this.loop, -11)
+    const frame = useFrame()
+    frame.on('beforeFrame', this.loop)
 
     this.events = new Events()
     this.events.setMaxListeners(Infinity)
@@ -72,13 +72,10 @@ const mouse = new Vue({
 
       this.position.set(x, y)
 
-      this.events.emit('mousemove', {
-        ...this.$data,
-        normalized: this.normalized,
-        originalEvent: e
-      })
+      this.events.emit('mousemove')
 
-      gsap.to(this.lerpedPosition, {
+      this.tween?.kill()
+      this.tween = gsap.to(this.lerpedPosition, {
         duration: this.hasMoved ? 1 : 0,
         x,
         y,

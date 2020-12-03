@@ -32,14 +32,14 @@
 
 <script>
 /* eslint-disable vue/no-unused-components */
-import WebglImage from '@/components/webgl/image'
-import NativeImage from '@/components/elements/image'
+// import WebglImage from '@/components/webgl/image'
+// import NativeImage from '@/components/elements/image'
 
 export default {
-  components: {
-    WebglImage,
-    NativeImage
-  }
+  // components: {
+  //   WebglImage,
+  //   NativeImage
+  // }
 }
 </script>
 

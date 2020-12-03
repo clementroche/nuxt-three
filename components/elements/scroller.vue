@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import gsap from 'gsap'
 import ResizeObserver from 'resize-observer-polyfill'
+import gsap from '@/libs/gsap-bonus/gsap-core.js'
 import VelocityTracker from '@/libs/gsap-bonus/utils/VelocityTracker'
 import useVirtualScroll from '@/hooks/use-virtual-scroll'
 import frame from '@/mixins/frame'

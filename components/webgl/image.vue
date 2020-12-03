@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import gsap from 'gsap'
+import gsap from '@/libs/gsap-bonus/gsap-core.js'
 import useWebGL from '@/hooks/use-webgl'
 import boundingRect from '@/mixins/bounding-rect'
 import viewportResize from '@/mixins/viewport-resize'

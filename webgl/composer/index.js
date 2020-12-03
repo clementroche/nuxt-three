@@ -12,7 +12,7 @@ import {
 } from 'postprocessing'
 
 import AntialiasingEffect from './effects/antialiasing'
-// import BarrelEffect from './effects/barrel'
+import BarrelEffect from './effects/barrel'
 
 // import MouseFlowmapEffect from './effects/mouse-flowmap'
 
@@ -66,6 +66,7 @@ export default class Composer {
     this.AAPass = new EffectPass(this.camera, this.AAEffect.smaaEffect)
 
     this.chromaticAberrationEffect = new ChromaticAberrationEffect()
+    this.barrelEffect = new BarrelEffect({ intensity: 0 })
 
     // this.glitchEffect = new GlitchEffect({
     //   perturbationMap: this.assets.get('perturbation-map')
@@ -79,6 +80,8 @@ export default class Composer {
       this.camera,
       this.chromaticAberrationEffect
     )
+
+    this.barrelPass = new EffectPass(this.camera, this.barrelEffect)
     // this.glitchPass = new EffectPass(this.camera, this.glitchEffect)
 
     // addPasses
@@ -86,6 +89,7 @@ export default class Composer {
 
     this.composer.addPass(this.AAPass)
     this.composer.addPass(this.chromaticAberrationPass)
+    this.composer.addPass(this.barrelPass)
     // this.composer.addPass(this.glitchPass)
 
     this.events.emit('load')

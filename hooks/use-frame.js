@@ -1,5 +1,5 @@
 import Events from 'events'
-import gsap from 'gsap'
+import gsap from '@/libs/gsap-bonus/gsap-core.js'
 
 let frame
 
@@ -7,8 +7,8 @@ const useFrame = () => {
   if (frame) return frame
   frame = new Events()
 
-  gsap.ticker.add((time, deltaTime, frameIndex) => {
-    const props = { time, deltaTime, frameIndex }
+  gsap.ticker.add((time, deltaTime, frm) => {
+    const props = { time, deltaTime, frame: frm }
     frame.emit('statsBegin', props)
 
     frame.emit('beforeFrame', props)

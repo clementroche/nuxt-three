@@ -19,6 +19,7 @@ class Kinesis {
   }
 
   destroy() {
+    const frame = useFrame()
     frame.off('frame', this.onFrame)
   }
 }

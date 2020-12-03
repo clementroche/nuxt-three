@@ -31,15 +31,30 @@
 </template>
 
 <script>
-/* eslint-disable vue/no-unused-components */
-// import WebglImage from '@/components/webgl/image'
-// import NativeImage from '@/components/elements/image'
+import useWebGL from '@/hooks/use-webgl'
+import scroll from '@/mixins/scroll'
+import gsap from '@/libs/gsap-bonus/gsap-core.js'
 
 export default {
-  // components: {
-  //   WebglImage,
-  //   NativeImage
-  // }
+  mixins: [scroll],
+
+  watch: {
+    scrollVelocity() {
+      const { composer } = useWebGL()
+      // composer.barrelEffect.uniforms.get('intensity').value = -0.1
+      const instensity = -Math.min(
+        0.1,
+        Math.abs(this.scrollVelocity.y) * 0.0001
+      )
+
+      this.tween?.kill()
+      this.tween = gsap.to(composer.barrelEffect.uniforms.get('intensity'), {
+        duration: 2,
+        ease: 'expo.out',
+        value: instensity
+      })
+    }
+  }
 }
 </script>
 

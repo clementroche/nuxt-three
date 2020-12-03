@@ -61,12 +61,12 @@ export default class Composer {
   }
 
   async initComposer() {
+    this.chromaticAberrationEffect = new ChromaticAberrationEffect()
+    this.barrelEffect = new BarrelEffect({ intensity: 0 })
+
     await this.load()
 
     this.AAPass = new EffectPass(this.camera, this.AAEffect.smaaEffect)
-
-    this.chromaticAberrationEffect = new ChromaticAberrationEffect()
-    this.barrelEffect = new BarrelEffect({ intensity: 0 })
 
     // this.glitchEffect = new GlitchEffect({
     //   perturbationMap: this.assets.get('perturbation-map')

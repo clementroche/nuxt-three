@@ -86,6 +86,7 @@ export default {
     const { DOMScene } = useWebGL()
     DOMScene.add(this.mesh)
 
+    this.positionate()
     this.resize()
   },
   async beforeDestroy() {

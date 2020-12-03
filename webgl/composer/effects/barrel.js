@@ -22,10 +22,11 @@ const fragment = `
 
   void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
     vec2 vUv = uv;
-    vec2 barrelUv = brownConradyDistortion(vUv,intensity,0.);
+    vec2 barrelUv = brownConradyDistortion(vUv,intensity * ((1.-uv.y) * 0.5),0.);
     vUv = barrelUv;
 
     outputColor = texture2D(inputBuffer,vUv);
+    // outputColor.r = (1.-uv.y) * 0.2;
   }
 `
 

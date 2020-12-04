@@ -128,7 +128,7 @@ export default {
     transition-timing-function: var(--ease-out-quint);
     white-space: nowrap;
 
-    @include media('>l') {
+    @include media('>tablet') {
       font-size: 125px;
       letter-spacing: 20px;
     }

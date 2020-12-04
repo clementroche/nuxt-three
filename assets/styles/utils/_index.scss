@@ -1,1 +1,93 @@
 @import 'aspect-ratio';
+
+.u-uppercase {
+  text-transform: uppercase;
+}
+
+.u-align-center {
+  text-align: center;
+}
+
+.u-underline {
+  position: relative;
+
+  &::before {
+    background-color: currentColor;
+    bottom: 0;
+    content: '';
+    height: 1px;
+    left: 0;
+    position: absolute;
+    width: calc(var(--progress, 1) * 100%);
+    z-index: 2;
+  }
+}
+
+.u-splitted-text {
+  span {
+    margin-right: 0.25ch;
+  }
+}
+
+.u-rollover {
+  display: inline-block;
+  position: relative;
+
+  @include hover {
+    &:hover {
+      // overflow: unset !important;
+
+      &::after {
+        height: 100%;
+      }
+    }
+  }
+
+  &--hover {
+    &::after {
+      height: 100% !important;
+    }
+  }
+
+  &::after {
+    background-color: var(--c-white);
+    bottom: 0;
+    content: '';
+    display: block;
+    height: 0;
+    left: -4px;
+    mix-blend-mode: difference;
+    position: absolute;
+    right: -4px;
+    transition: 400ms _ease('expo', 'out');
+    transition-property: height;
+  }
+}
+
+.u-link-hover {
+  display: block;
+  position: relative;
+
+  @include hover {
+    &:hover {
+      &::after {
+        transform: scaleX(0);
+        transform-origin: center right;
+      }
+    }
+  }
+
+  &::after {
+    background-color: currentColor;
+    bottom: 0;
+    content: '';
+    display: block;
+    height: 1px;
+    left: 0;
+    position: absolute;
+    transform: scaleX(1);
+    transform-origin: center left;
+    transition: transform 400ms ease-out;
+    width: 100%;
+  }
+}

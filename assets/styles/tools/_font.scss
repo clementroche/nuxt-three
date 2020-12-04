@@ -1,0 +1,34 @@
+@mixin fonts {
+  @each $font in $fonts {
+    @font-face {
+      font-family: $font;
+      font-style: normal;
+      font-weight: 400;
+      src: url('/fonts/#{$font}/#{$font}.woff2') format('woff2'),
+        url('/fonts/#{$font}/#{$font}.woff') format('woff'),
+        url('/fonts/#{$font}/#{$font}.otf') format('opentype');
+    }
+  }
+}
+
+@mixin font-styles {
+  @each $name, $style in $font-styles {
+    .e-#{$name} {
+      @if type-of($style) == 'map' {
+        @each $breakpoint, $values in $style {
+          @include media(#{$breakpoint}) {
+            font-family: nth($values, 1);
+            font-size: nth($values, 2);
+            letter-spacing: nth($values, 4);
+            line-height: nth($values, 3);
+          }
+        }
+      } @else {
+        font-family: nth($style, 1);
+        font-size: nth($style, 2);
+        letter-spacing: nth($style, 4);
+        line-height: nth($style, 3);
+      }
+    }
+  }
+}

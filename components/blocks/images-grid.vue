@@ -120,7 +120,7 @@ export default {
 .imagesGrid {
   margin: auto;
   padding-bottom: 24px;
-  @include media('>m') {
+  @include media('>tablet') {
     display: flex;
     justify-content: center;
   }
@@ -128,7 +128,7 @@ export default {
   &__column {
     margin: auto;
     width: calc(100vw - 48px);
-    @include media('>m') {
+    @include media('>tablet') {
       margin: 0 24px;
       width: 25vw;
     }

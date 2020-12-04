@@ -1,0 +1,34 @@
+:root {
+  --layout-gap: 24px;
+  --layout-width: calc(100vw - 2 * var(--layout-gap));
+  --layout-columns: 5;
+  --layout-border: calc((100vw - var(--layout-width)) / 2);
+
+  @include media('>tablet') {
+    --layout-columns: 6;
+    --layout-width: 88vw;
+  }
+}
+
+.b-layoutSection {
+  padding-bottom: 96px;
+  padding-top: 64px;
+
+  @include media('>tablet') {
+    padding-bottom: 200px;
+    padding-top: 200px;
+  }
+}
+
+.b-layoutBlock {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1440px;
+  width: var(--layout-width);
+}
+
+.b-layoutGrid {
+  column-gap: var(--layout-gap);
+  display: grid;
+  grid-template-columns: repeat(var(--layout-columns), 1fr);
+}

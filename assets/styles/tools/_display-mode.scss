@@ -1,0 +1,11 @@
+@mixin mode($display) {
+  $_display: 'standalone' !default;
+
+  @if variable-exists($display) {
+    $_display: $display;
+  }
+
+  @media (display-mode: standalone) {
+    @content;
+  }
+}

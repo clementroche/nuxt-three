@@ -1,0 +1,21 @@
+@function _strip-unit($num) {
+  @return $num / ($num * 0 + 1);
+}
+
+@mixin lerp($rule, $min-vw, $max-vw, $min-font-size, $max-font-size) {
+  $u1: unit($min-vw);
+  $u2: unit($max-vw);
+  $u3: unit($min-font-size);
+  $u4: unit($max-font-size);
+
+  @if $u1 == $u2 and $u1 == $u3 and $u1 == $u4 {
+    #{$rule}: $min-font-size;
+    @media screen and (min-width: $min-vw) {
+      #{$rule}: calc(#{$min-font-size} + #{_strip-unit($max-font-size - $min-font-size)} *
+      ((100vw - #{$min-vw}) / #{_strip-unit($max-vw - $min-vw)}));
+    }
+    @media screen and (min-width: $max-vw) {
+      #{$rule}: $max-font-size;
+    }
+  }
+}

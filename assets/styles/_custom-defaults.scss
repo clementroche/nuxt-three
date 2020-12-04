@@ -1,0 +1,64 @@
+@include fonts();
+@include font-styles();
+
+:root {
+  --font-gotham-ultra: 'GothamUltra';
+
+  @include colors();
+}
+
+a {
+  color: inherit;
+  text-decoration: unset;
+
+  &:focus {
+    outline: unset;
+  }
+}
+
+button {
+  background-color: transparent;
+  border: unset;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  outline: unset;
+  padding: 0;
+}
+
+html {
+  box-sizing: border-box;
+  height: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html,
+body,
+#__nuxt,
+#__layout {
+  width: 100%;
+}
+
+// Preserve `min-height` accross nuxt generated elements.
+body,
+#__nuxt,
+#__layout,
+#__content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+body {
+  background-color: var(--c-black);
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100%;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+}

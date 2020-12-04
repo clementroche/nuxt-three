@@ -1,0 +1,30 @@
+:root {
+  --t-stagger: 300ms;
+}
+
+.transition {
+  &__maskInBottom {
+    display: block;
+    overflow: hidden;
+
+    > * {
+      display: block;
+      transition-delay: calc((var(--i, 0) * var(--t-stagger)));
+      transition-duration: 1s;
+      transition-property: transform;
+      transition-timing-function: _ease('expo', 'out');
+    }
+
+    &--to {
+      > * {
+        transform: translate(0, 0);
+      }
+    }
+
+    &--from {
+      > * {
+        transform: translate(0, 100%);
+      }
+    }
+  }
+}

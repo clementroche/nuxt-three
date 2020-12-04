@@ -87,7 +87,10 @@ export default {
     }
   },
   loading: false,
-  css: ['@/assets/styles/app.scss'],
+  css:
+    process.env.NODE_ENV === 'development'
+      ? ['@/assets/styles/debug.scss', '@/assets/styles/app.scss']
+      : ['@/assets/styles/app.scss'],
   plugins: [
     { src: '~/plugins/events.js', mode: 'client' },
     { src: '~/plugins/viewport.js', mode: 'client' },

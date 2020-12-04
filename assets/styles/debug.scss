@@ -1,0 +1,5 @@
+/* [SEO] Debugging <img> with invalid alt attribute */
+img:not([alt]),
+img[alt=''] {
+  border: 5px solid rgb(255, 0, 0);
+}

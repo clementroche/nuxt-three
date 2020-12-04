@@ -4,7 +4,8 @@
 :root {
   --font-gotham-ultra: 'GothamUltra';
 
-  @include colors();
+  --c-white: rgba(255, 255, 255, 1);
+  --c-black: rgba(0, 0, 0, 1);
 }
 
 a {

@@ -14,7 +14,7 @@ function uuidv4() {
 
 export default {
   version: uuidv4(),
-  mode: 'universal',
+  target: 'static',
   ...buildModules,
   ...modules,
   ...head,

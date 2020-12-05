@@ -73,8 +73,7 @@ export default {
     },
     afterLeave(el) {
       // console.log('After leave...')
-      this.$events.emit('router:change')
-      this.$events.emit('cursor:unstick')
+      this.$events.emit('cursor:enter', { type: 'default' })
     },
     beforeEnter(el) {
       // console.log('Before enter...')

@@ -1,5 +1,8 @@
 <template>
-  <div class="e-scroller">
+  <div
+    :class="{ 'e-scroller--horizontal': direction === 'horizontal' }"
+    class="e-scroller"
+  >
     <div
       ref="inner"
       :style="{
@@ -22,6 +25,11 @@ import boundingRect from '@/mixins/bounding-rect'
 
 export default {
   mixins: [frame, boundingRect],
+
+  props: {
+    direction: { type: String, default: 'vertical' }
+  },
+
   data() {
     return {
       position: { x: 0, y: 0 },
@@ -42,11 +50,11 @@ export default {
   },
   mounted() {
     this.resizeObserver = new ResizeObserver((entries) => {
-      const boundingRect = entries[0].contentRect
+      const contentRect = entries[0].contentRect
 
       this.maxScroll = {
-        x: boundingRect.width - this.boundingRect.width,
-        y: boundingRect.height - this.boundingRect.height
+        x: contentRect.width - this.boundingRect.width,
+        y: contentRect.height - this.boundingRect.height
       }
     })
 
@@ -101,6 +109,12 @@ export default {
         this.position.y - deltaY
       )
 
+      this.position.x = gsap.utils.clamp(
+        0,
+        this.maxScroll.x,
+        this.position.x - deltaY
+      )
+
       this.scrollTo({ ...this.position })
     },
     reset() {
@@ -110,4 +124,17 @@ export default {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.e-scroller {
+  &__inner {
+    min-height: 100%;
+    min-width: 100%;
+  }
+
+  &--horizontal {
+    .e-scroller__inner {
+      display: inline-flex;
+    }
+  }
+}
+</style>

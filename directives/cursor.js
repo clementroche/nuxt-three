@@ -1,25 +1,41 @@
 import events from '@/plugins/events'
 
+const instances = new Map()
+
+class Cursor {
+  constructor(el, options) {
+    this.el = el
+    this.options = options
+
+    this.el.addEventListener('mouseenter', this.onMouseEnter)
+    this.el.addEventListener('mouseleave', this.onMouseLeave)
+  }
+
+  onMouseEnter = () => {
+    events.emit('cursor:enter', this.options)
+  }
+
+  onMouseLeave = () => {
+    events.emit('cursor:enter', { type: 'default' })
+  }
+
+  destroy() {
+    this.el.removeEventListener('mouseenter', this.onMouseEnter)
+    this.el.removeEventListener('mouseleave', this.onMouseLeave)
+  }
+}
+
 export default {
-  bind(el, binding, { context }) {
-    const params = binding.value
+  inserted(el, binding) {
+    const params = binding.value || {}
+    console.log(params)
 
-    function onMouseEnter() {
-      events.emit('cursor:enter', params)
-    }
-
-    function onMouseLeave() {
-      events.emit('cursor:enter', { type: 'default' })
-    }
-
-    el.vMouseEnter = onMouseEnter.bind(this)
-    el.vMouseLeave = onMouseLeave.bind(this)
-
-    el.addEventListener('mouseenter', el.vMouseEnter, false)
-    el.addEventListener('mouseleave', el.vMouseLeave, false)
+    if (instances.has(el)) return
+    instances.set(el, new Cursor(el, params))
   },
-  unbind(el, binding, { context }) {
-    el.removeEventListener('mouseenter', el.vMouseEnter)
-    el.removeEventListener('mouseleave', el.vMouseLeave)
+  unbind(el) {
+    if (!instances.has(el)) return
+    instances.get(el).destroy()
+    instances.delete(el)
   }
 }

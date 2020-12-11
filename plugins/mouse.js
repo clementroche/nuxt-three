@@ -1,6 +1,6 @@
 import Events from 'events'
 import Vue from 'vue'
-import gsap from '@/libs/gsap-bonus/gsap-core.js'
+import gsap from '@/libs/gsap-bonus'
 import viewport from '@/plugins/viewport'
 import useFrame from '@/hooks/use-frame'
 

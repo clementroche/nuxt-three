@@ -91,6 +91,7 @@ export default {
       ? ['@/assets/styles/debug.scss', '@/assets/styles/app.scss']
       : ['@/assets/styles/app.scss'],
   plugins: [
+    { src: '~/plugins/polyfills.js', mode: 'client' },
     { src: '~/plugins/events.js', mode: 'client' },
     { src: '~/plugins/viewport.js', mode: 'client' },
     { src: '~/plugins/mouse.js', mode: 'client' },

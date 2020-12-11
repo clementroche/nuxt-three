@@ -6,7 +6,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import gsap from '@/libs/gsap-bonus/gsap-core'
+import gsap from '@/libs/gsap-bonus'
 import useWebGL from '@/hooks/use-webgl'
 // import useRAF from '@/hooks/use-raf'
 import frame from '@/mixins/frame'

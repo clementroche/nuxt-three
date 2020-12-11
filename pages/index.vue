@@ -33,7 +33,7 @@
 <script>
 import useWebGL from '@/hooks/use-webgl'
 import scroll from '@/mixins/scroll'
-import gsap from '@/libs/gsap-bonus/gsap-core.js'
+import gsap from '@/libs/gsap-bonus'
 
 export default {
   mixins: [scroll],

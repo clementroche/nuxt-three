@@ -1,14 +1,13 @@
-[style*='--aspect-ratio']::before,
-[style*='--aspect-ratio'] > :first-child {
+[style*='--aspect-ratio']::before {
   width: 100%;
 }
 
-[style*='--aspect-ratio'] > :first-child {
-  height: 100%;
-  left: 0;
-  position: absolute;
-  top: 0;
-}
+// [style*='--aspect-ratio'] > :first-child {
+//   height: 100%;
+//   left: 0;
+//   position: absolute;
+//   top: 0;
+// }
 
 [style*='--aspect-ratio'] {
   position: relative;

@@ -1,5 +1,5 @@
 import Events from 'events'
-import gsap from '@/libs/gsap-bonus/gsap-core.js'
+import gsap from '@/libs/gsap-bonus'
 
 let frame
 

@@ -9,6 +9,9 @@
         callback: (isVisible) => {
           inView = isVisible
         },
+        intersection: {
+          threshold: 0
+        },
         once: true
       }"
       class="image__trigger"

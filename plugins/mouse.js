@@ -1,10 +1,7 @@
-import Events from 'events'
 import Vue from 'vue'
+import events from '@/plugins/events'
 import gsap from '@/libs/gsap-bonus'
 import viewport from '@/plugins/viewport'
-import useFrame from '@/hooks/use-frame'
-
-/* eslint-disable nuxt/no-env-in-hooks */
 
 const mouse = new Vue({
   data() {
@@ -38,22 +35,18 @@ const mouse = new Vue({
   created() {
     if (!process.client) return
 
-    const frame = useFrame()
-    frame.on('beforeFrame', this.loop)
+    events.on('frame:beforeFrame', this.loop)
 
-    this.events = new Events()
-    this.events.setMaxListeners(Infinity)
-
-    window.addEventListener('touchstart', this.onMouseMove, false)
-    window.addEventListener('touchmove', this.onMouseMove, false)
-    window.addEventListener('mousemove', this.onMouseMove, false)
+    addEventListener('touchstart', this.onMouseMove, false)
+    addEventListener('touchmove', this.onMouseMove, false)
+    addEventListener('mousemove', this.onMouseMove, false)
   },
   beforeDestroy() {
     if (!process.client) return
 
-    window.removeEventListener('touchstart', this.onMouseMove, false)
-    window.removeEventListener('touchmove', this.onMouseMove, false)
-    window.removeEventListener('mousemove', this.onMouseMove, false)
+    removeEventListener('touchstart', this.onMouseMove, false)
+    removeEventListener('touchmove', this.onMouseMove, false)
+    removeEventListener('mousemove', this.onMouseMove, false)
   },
   methods: {
     loop() {
@@ -72,7 +65,7 @@ const mouse = new Vue({
 
       this.position.set(x, y)
 
-      this.events.emit('mousemove')
+      events.emit('mouse:mousemove')
 
       this.tween?.kill()
       this.tween = gsap.to(this.lerpedPosition, {

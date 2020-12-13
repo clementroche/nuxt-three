@@ -1,42 +1,52 @@
-import Events from 'events'
 import Vue from 'vue'
 import events from './events'
 
-/* eslint-disable nuxt/no-env-in-hooks */
-
 const viewport = new Vue({
   data() {
-    if (!process.client) return {}
-    return {
-      width: document.documentElement.clientWidth || document.body.clientWidth,
-      height: window.innerHeight,
-      ratio: window.innerWidth / window.innerHeight
+    return !process.client
+      ? {}
+      : {
+          width:
+            document.documentElement.clientWidth || document.body.clientWidth,
+          height: Math.min(
+            window.innerHeight,
+            document.documentElement.clientHeight
+          ),
+          event: null
+        }
+  },
+  computed: {
+    ratio() {
+      if (!process.client) return
+      return this.width / this.height
     }
   },
   created() {
     if (!process.client) return
-    this.events = new Events()
-    this.events.setMaxListeners(Infinity)
+
     this.onWindowResize()
-    window.addEventListener('resize', this.onWindowResize, false)
-    events.on('viewport:resize', this.onWindowResize)
+    addEventListener('resize', this.onWindowResize, false)
   },
   beforeDestroy() {
     if (!process.client) return
-    window.removeEventListener('resize', this.onWindowResize, false)
+    removeEventListener('resize', this.onWindowResize, false)
   },
   methods: {
-    onWindowResize() {
+    onWindowResize(event) {
       this.width =
         document.documentElement.clientWidth || document.body.clientWidth
-      this.height = window.innerHeight
-      this.ratio = this.width / this.height
+      this.height = Math.min(
+        window.innerHeight,
+        document.documentElement.clientHeight
+      ) // fixing invalid value on chrome
+
+      this.event = event
 
       // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
       const vh = this.height * 0.01
       document.documentElement.style.setProperty('--vh', `${vh}px`)
 
-      this.events.emit('resize', this.$data)
+      events.emit('viewport:resize', this.$data)
     }
   }
 })

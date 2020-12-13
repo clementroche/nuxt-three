@@ -23,7 +23,10 @@
 </template>
 
 <script>
+import viewportResize from '@/mixins/viewport-resize'
+
 export default {
+  mixins: [viewportResize],
   data() {
     return {
       webglEnabled: true,
@@ -102,14 +105,9 @@ export default {
   },
   mounted() {
     this.webglEnabled = this.$viewport.width > 768
-
-    this.$viewport.events.on('resize', this.onWindowResize)
-  },
-  beforeDestroy() {
-    this.$viewport.events.off('resize', this.onWindowResize)
   },
   methods: {
-    onWindowResize() {
+    onViewportResize() {
       this.webglEnabled = this.$viewport.width > 768
     }
   }

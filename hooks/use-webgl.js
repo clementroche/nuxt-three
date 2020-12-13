@@ -1,14 +1,12 @@
 import Stats from 'stats.js'
 
 import viewport from '@/plugins/viewport'
-import useFrame from '@/hooks/use-frame'
+import events from '@/plugins/events'
 
 let webgl
 
 class WebGL {
   constructor() {
-    const frame = useFrame()
-
     // clock
     this.clock = new THREE.Clock()
 
@@ -62,10 +60,8 @@ class WebGL {
     if (process.env.NODE_ENV === 'development') {
       this.stats = new Stats()
       document.body.appendChild(this.stats.dom)
-      frame.on('statsBegin', this.stats.begin)
-      frame.on('statsEnd', this.stats.end)
-      // RAF.add('stats-begin', this.stats.begin, -1000)
-      // RAF.add('stats-end', this.stats.end, 1000)
+      events.on('frame:statsBegin', this.stats.begin)
+      events.on('frame:statsEnd', this.stats.end)
     }
 
     // raycaster
@@ -73,14 +69,13 @@ class WebGL {
     this.raycaster = new Raycaster(this.camera)
 
     // events
-    viewport.events.on('resize', this.onWindowResize)
+    events.on('viewport:resize', this.onWindowResize)
 
     // raf
-    // RAF.add('use-webgl', this.loop, 10)
-    frame.on('render', this.loop)
+    events.on('frame:render', this.loop)
   }
 
-  loop = ({ time, deltaTime, frameIndex }) => {
+  loop = ({ time, deltaTime, frame }) => {
     this.renderer.setSize(viewport.width, viewport.height)
     // this.renderer.render(this.scene, this.camera)
     this.composer.render(time)
@@ -113,14 +108,9 @@ class WebGL {
   }
 
   destroy() {
-    // const RAF = useRAF()
-    // RAF.remove('stats-begin')
-    // RAF.remove('stats-end')
-    // RAF.remove('use-webgl')
-
-    frame.off('statsBegin', this.stats.begin)
-    frame.off('statsEnd', this.stats.end)
-    frame.off('render', this.loop)
+    events.off('frame:statsBegin', this.stats.begin)
+    events.off('frame:statsEnd', this.stats.end)
+    events.off('frame:render', this.loop)
   }
 }
 

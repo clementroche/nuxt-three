@@ -1,6 +1,6 @@
 <template>
   <div class="appTitle">
-    <h1 v-kinesis="{ depth: 50 }" class="appTitle__title">nuxt-three</h1>
+    <h1 v-kinesis="{ depth: 10 }" class="appTitle__title">nuxt-three</h1>
   </div>
 </template>
 
@@ -47,6 +47,8 @@ export default {
 
     this.addBox()
 
+    this.$events.on('raycaster:mousemove', this.onRaycast)
+
     // const RAF = useRAF()
     // RAF.add('title', this.loop, 0)
   },
@@ -59,7 +61,7 @@ export default {
 
     raycaster.removeTarget(this.cube)
 
-    raycaster.events.off('mousemove', this.onRaycast)
+    this.$events.off('raycaster:mousemove', this.onRaycast)
   },
   methods: {
     onFrame() {
@@ -72,8 +74,14 @@ export default {
 
       if (this.$mouse.hasMoved) {
         this.cube.rotation.set(
-          -this.$mouse.lerpedNormalized.y * 0.2,
-          this.$mouse.lerpedNormalized.x * 0.2,
+          this.$mouse.lerpedNormalized.y * 0.2,
+          -this.$mouse.lerpedNormalized.x * 0.2,
+          0
+        )
+
+        this.cube.position.set(
+          this.$mouse.lerpedNormalized.x * 33,
+          this.$mouse.lerpedNormalized.y * 33,
           0
         )
       }
@@ -100,8 +108,6 @@ export default {
       DOMScene.add(this.cube)
 
       raycaster.addTarget(this.cube)
-
-      raycaster.events.on('mousemove', this.onRaycast)
     }
   }
 }
@@ -118,8 +124,8 @@ export default {
   &__title {
     color: var(--c-white);
     font-family: var(--font-gotham-ultra);
-    font-size: 10vw;
-    letter-spacing: 2vw;
+    font-size: clamp(24px, 10vw, 150px);
+    letter-spacing: clamp(5px, 2vw, 30px);
     text-align: center;
     -webkit-text-stroke: 1px transparent;
     text-transform: uppercase;
@@ -128,12 +134,12 @@ export default {
     transition-timing-function: var(--ease-out-quint);
     white-space: nowrap;
 
-    @include media('>tablet') {
-      font-size: 125px;
-      letter-spacing: 20px;
-    }
+    // @include media('>tablet') {
+    //   font-size: 125px;
+    //   letter-spacing: 20px;
+    // }
 
-    @media (hover: hover) {
+    @include hover {
       &:hover {
         color: transparent;
         -webkit-text-stroke: 1px var(--c-white);

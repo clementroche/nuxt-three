@@ -29,7 +29,7 @@ const viewport = new Vue({
   },
   beforeDestroy() {
     if (!process.client) return
-    removeEventListener('resize', this.onWindowResize, false)
+    removeEventListener('resize', this.onWindowResize)
   },
   methods: {
     onWindowResize(event) {

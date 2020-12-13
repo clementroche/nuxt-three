@@ -10,7 +10,7 @@ export default class Raycaster {
     this.targets = {}
 
     events.on('mouse:mousemove', this.cast.bind(this, 'mousemove'))
-    window.addEventListener('click', this.cast.bind(this, 'click'), false)
+    addEventListener('click', this.cast.bind(this, 'click'), false)
   }
 
   addTarget(object) {

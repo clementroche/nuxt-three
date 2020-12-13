@@ -44,9 +44,9 @@ const mouse = new Vue({
   beforeDestroy() {
     if (!process.client) return
 
-    removeEventListener('touchstart', this.onMouseMove, false)
-    removeEventListener('touchmove', this.onMouseMove, false)
-    removeEventListener('mousemove', this.onMouseMove, false)
+    removeEventListener('touchstart', this.onMouseMove)
+    removeEventListener('touchmove', this.onMouseMove)
+    removeEventListener('mousemove', this.onMouseMove)
   },
   methods: {
     loop() {

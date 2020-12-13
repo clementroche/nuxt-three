@@ -1,6 +1,7 @@
 @mixin fonts {
   @each $font in $fonts {
     @font-face {
+      font-display: swap;
       font-family: $font;
       font-style: normal;
       font-weight: 400;

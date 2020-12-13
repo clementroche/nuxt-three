@@ -7,8 +7,8 @@ class Cursor {
     this.el = el
     this.options = options
 
-    this.el.addEventListener('mouseenter', this.onMouseEnter)
-    this.el.addEventListener('mouseleave', this.onMouseLeave)
+    this.el.addEventListener('mouseenter', this.onMouseEnter, false)
+    this.el.addEventListener('mouseleave', this.onMouseLeave, false)
   }
 
   onMouseEnter = () => {

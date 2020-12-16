@@ -67,13 +67,14 @@ export default {
     mode: 'out-in',
     beforeLeave(el) {
       // console.log('Before leave...')
+      this.$events.emit('cursor:enter', { type: 'default' })
     },
     leave(el) {
       // console.log('Enter...')
+      this.$events.emit('scroller:reset')
     },
     afterLeave(el) {
       // console.log('After leave...')
-      this.$events.emit('cursor:enter', { type: 'default' })
     },
     beforeEnter(el) {
       // console.log('Before enter...')

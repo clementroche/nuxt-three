@@ -118,7 +118,8 @@ export default {
       this.scrollTo({ ...this.position })
     },
     reset() {
-      this.position = this.lerpedScrollPosition = { x: 0, y: 0 }
+      this.position = { x: 0, y: 0 }
+      this.lerpedPosition = { x: 0, y: 0 }
     }
   }
 }

@@ -1,7 +1,8 @@
 <template>
   <e-image
-    @src="
+    @load="
       (src) => {
+        $emit('load', src)
         currentSrc = src
       }
     "
@@ -158,8 +159,8 @@ export default {
       if (this.preventPosition) return
       const elementCenterX = this.boundingRect.width / 2
       const elementCenterY = this.boundingRect.height / 2
-      const elementX = this.boundingRect.left - this.scrollInitalPosition.x
-      const elementY = this.boundingRect.top + this.scrollInitalPosition.y
+      const elementX = this.boundingRect.left + this.scrollInitialPosition.x
+      const elementY = this.boundingRect.top + this.scrollInitialPosition.y
       const x = -this.$viewport.width / 2 + elementX + elementCenterX
       const y = this.$viewport.height / 2 - elementY - elementCenterY
       this.mesh.position.set(x, y, 0)

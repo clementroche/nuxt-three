@@ -26,7 +26,6 @@
       @load="onLoad"
       v-bind="inView || !lazyLoad ? { ...$attrs, ...{ src: src } } : {}"
       :style="{ 'object-fit': objectFit }"
-      alt=""
     />
   </picture>
 </template>
@@ -64,7 +63,7 @@ export default {
   },
   watch: {
     currentSrc() {
-      this.$emit('src', this.currentSrc)
+      this.$emit('load', this.currentSrc)
     }
   },
   methods: {
@@ -87,20 +86,6 @@ export default {
     opacity: 1;
   }
 
-  source {
-    display: none;
-  }
-
-  &__trigger {
-    height: calc(100% + 500px);
-    left: 50%;
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    visibility: hidden;
-    width: calc(100% + 10000px);
-  }
-
   img {
     display: block;
     height: 100%;
@@ -108,6 +93,20 @@ export default {
     position: absolute;
     top: 0;
     width: 100%;
+  }
+
+  source {
+    display: none;
+  }
+
+  &__trigger {
+    height: calc(100% + 3000px);
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    visibility: hidden;
+    width: calc(100% + 3000px);
   }
 }
 </style>
